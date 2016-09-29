@@ -1,57 +1,50 @@
-﻿ALUMNES 
----------
-Instal·lar git a linux "sudo apt-get install git-core" i clonar repositori (Sols es fa una vegada)
-git clone https://github.com/pedcremo/scriptkana.git
+﻿PUPILS INFORMATION
+-------------------
+In case git tools is not present in your system first you should install git tool on linux "sudo apt-get install git-core" and afterwards clone PONG repository (Only do it once)
 
-Sincronització per recollir canvis (Cada vegada que vulguem treballar al projecte i estar sincronitzats amb els canvis del repositori git remot)
-git pull https://github.com/pedcremo/scriptkana.git
+"git clone https://github.com/pedcremo/pong.git"
 
-URL's del projecte amb diferents protocols
+Synchronization in order to be project up to date changes (You should perform it every time you start every working session)
 
-GIT
-git://github.com/pedcremo/scriptkana.git
-
-SSH
-git@github.com:pedcremo/scriptkana.git
-
-HTTP
-https://github.com/pedcremo/scriptkana.git
+git pull https://github.com/pedcremo/pong.git
 
 
-TUTORIAL GIT
--------------
-http://try.github.com/   //Tutorial al estil de codeacademy per apendre en 15 minuts
+
+GIT USEFUL TUTORIALS FOR NEWBIES
+--------------------------------
+http://try.github.com/   //Codeacademy styled tutorial to be ready in 15 minutes
 http://learn.github.com/p/intro.html
 https://help.github.com/articles/create-a-repo
 
 
 
-PASOS PER A QUI TINGA QUE ADMINISTRAR CREAR UN REPOSITORI EN GITHUB DES DE ZERO
--------------------------------------------------------------------------------
-1. Comencem el nostre projecte en local
-2. dins del directori pare del projecte executem "git init" per crear el repositori
-3. Executem "git add *" per afegir tots els arxius a la stage area (local)
-4. En qualsevol moment podem executar "git status" per saber que hi ha al repositori
-5. Farem 'git commit -a -m "Primera versió del arkanoid OO"' per consolidar els canvis en el repositori i explicar en una frase breu el perquè (local)
-6. Afegim a la nostra configuració del git el repositori remot en gitHub on allotjarem el nostre repositori "git remote add origin https://github.com/pedcremo/scriptkana.git"
-7. Enviem els nostres canvis locals al repositori remot "git push -u origin master" (-u recorda paràmetres per tant després sols caldrà fer git push) ens preguntarà usuari i password de github. Si ens connectem a github vorem com allí comencen a apareixer els arxius del projecte
-OJO: Abans cal fer un pull per primera vegada per sincronitzar en remot
-"git pull https://github.com/pedcremo/scriptkana.git" 
+STEPS TO CREATE A GITHUB REPOSITORY FROM SCRATCH
+------------------------------------------------
+1. We init our project folder and files locally
+2. From newly createt folder root we run "git init" to create the repository.
+3. Run "git add *" to add all project files to stage area (locally)
+4. At every moment we can run "git status" to know what is inside repository and what not
+5. We'll do 'git commit -a -m "First PONG version"' to consolidate changes on repository and we must explain with a comment why(locally)
+6. We add our git setup to gitHub "git remote add origin https://github.com/pedcremo/pong.git"
+7. Send our local changes to remote repo "git push -u origin master" (-u used to remmber parameters so afterwards w can only command "git push") we will be asked for github user and pass . If we connect to github webpage files will appear there.
 
-8. Si no volem que ens pregunte usuari cada vegada
+TIP: At first it is recommended to perform a pull to synchronize remotely
+"git pull https://github.com/pedcremo/scriptkana.git"
+
+8. If you don't want to be asked at every moment for your credentials
  git config --global user.name "Your Name"
     git config --global user.email you@example.com
 
 
-Fluxe de treball amb git
--------------------------
-Recomanat llegir http://git-scm.com/book/es/Git-en-entornos-distribuidos-Flujos-de-trabajo-distribuidos 
+GIT RECOMMENDED WORKING FLOW
+----------------------------
+Recommended reading http://git-scm.com/book/es/Git-en-entornos-distribuidos-Flujos-de-trabajo-distribuidos
 
 
-1. "git pull" cada cop que comencem a treballar amb el nostre projecte
-2. "git add ." Per afegir els arxius que hem modificat al commit (no és necessari si fem "git commit -a -m "MESSAGE" ja que la -a afegeix a la stage àrea els arxius modificats) i "git add ARXIU" per afegir els nous que hem creat
-3. Per fer commit sempre recomanable "git commit -a -m 'MISSATGE'" fent que el missatge siga el més descriptiu possible.
-4. "git push" ("git push origin master" Pujar al repositori remot els nostres canvis
+1. "git pull" every time we start a new code working session
+2. "git add ." in order to add files modified in the current commit (not mandatory if we do "git commit -a -m "MESSAGE" because -a modifier adds to stage area modified files) and "git add FILE_NAME" to add new files
+3.  To perform a commit always recommended "git commit -a -m 'MESSAGE'" doing a descriptive as possible message.
+4. "git push" ("git push origin master" to upload changes to remote repo.
 
 Basic reference
 ---------------

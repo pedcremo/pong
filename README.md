@@ -1,17 +1,23 @@
-Crazy artifact with require
-===========================
+PONG game using javascript and nodeJS with require
+==================================================
 
-In order to run tests, you should:
+We are going to implement PONG. First console game in history
+Take a look at http://www.ponggame.org/
+
+In order to run for first time the project , you should:
 
 1. Run `npm install` in the provided sample code
-1. Start gulp using `./node_modules/gulp/bin/gulp.js watch`
-1. 
+2. Start gulp using `./node_modules/gulp/bin/gulp.js watch` (with this task executed, every time we do a change on every single script inside javascript folder this is automatically reflected on bin/main.js the only javascript file included in our deployed webapp project )
+
 
 ```
 
-Ojo que cada vegada que canviem quelcom .js al frontend cal "COMPILAR"
+Note that every time we change any .js and we don't have watch gulp task on execution we should "transpile" using:
+
 frontend$ ./node_modules/gulp/bin/gulp.js browserify
 
-Que ens generarà el bin/index.js que és un arxiu javascript on estan tots els .js
-del projecte embeguts.
-Això és així pq usem mòduls de nodeJS per al desenvolupamane (TO COMPLETE)
+Result will be  bin/index.js file embedding all project .js
+
+We are using nodeJS ecosystem in this project in an unusual way. Only for client
+web development. Uning requirejs module to be able to architect our project in a more
+scalable way.
