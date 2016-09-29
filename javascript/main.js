@@ -27,7 +27,7 @@
                             case "dblclick":
                                 if (artifact_.state !== "run"){
                                     artifact_.state="run";
-                                    artifact_.setDirection("NORTHWEST");
+                                    artifact_.setDirection("NORTH_WEST");
                                     //artifact_.dirX=-2;
                                     //artifact_.dirY=-2;
                                 }
