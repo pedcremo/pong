@@ -1,0 +1,97 @@
+﻿ALUMNES 
+---------
+Instal·lar git a linux "sudo apt-get install git-core" i clonar repositori (Sols es fa una vegada)
+git clone https://github.com/pedcremo/scriptkana.git
+
+Sincronització per recollir canvis (Cada vegada que vulguem treballar al projecte i estar sincronitzats amb els canvis del repositori git remot)
+git pull https://github.com/pedcremo/scriptkana.git
+
+URL's del projecte amb diferents protocols
+
+GIT
+git://github.com/pedcremo/scriptkana.git
+
+SSH
+git@github.com:pedcremo/scriptkana.git
+
+HTTP
+https://github.com/pedcremo/scriptkana.git
+
+
+TUTORIAL GIT
+-------------
+http://try.github.com/   //Tutorial al estil de codeacademy per apendre en 15 minuts
+http://learn.github.com/p/intro.html
+https://help.github.com/articles/create-a-repo
+
+
+
+PASOS PER A QUI TINGA QUE ADMINISTRAR CREAR UN REPOSITORI EN GITHUB DES DE ZERO
+-------------------------------------------------------------------------------
+1. Comencem el nostre projecte en local
+2. dins del directori pare del projecte executem "git init" per crear el repositori
+3. Executem "git add *" per afegir tots els arxius a la stage area (local)
+4. En qualsevol moment podem executar "git status" per saber que hi ha al repositori
+5. Farem 'git commit -a -m "Primera versió del arkanoid OO"' per consolidar els canvis en el repositori i explicar en una frase breu el perquè (local)
+6. Afegim a la nostra configuració del git el repositori remot en gitHub on allotjarem el nostre repositori "git remote add origin https://github.com/pedcremo/scriptkana.git"
+7. Enviem els nostres canvis locals al repositori remot "git push -u origin master" (-u recorda paràmetres per tant després sols caldrà fer git push) ens preguntarà usuari i password de github. Si ens connectem a github vorem com allí comencen a apareixer els arxius del projecte
+OJO: Abans cal fer un pull per primera vegada per sincronitzar en remot
+"git pull https://github.com/pedcremo/scriptkana.git" 
+
+8. Si no volem que ens pregunte usuari cada vegada
+ git config --global user.name "Your Name"
+    git config --global user.email you@example.com
+
+
+Fluxe de treball amb git
+-------------------------
+Recomanat llegir http://git-scm.com/book/es/Git-en-entornos-distribuidos-Flujos-de-trabajo-distribuidos 
+
+
+1. "git pull" cada cop que comencem a treballar amb el nostre projecte
+2. "git add ." Per afegir els arxius que hem modificat al commit (no és necessari si fem "git commit -a -m "MESSAGE" ja que la -a afegeix a la stage àrea els arxius modificats) i "git add ARXIU" per afegir els nous que hem creat
+3. Per fer commit sempre recomanable "git commit -a -m 'MISSATGE'" fent que el missatge siga el més descriptiu possible.
+4. "git push" ("git push origin master" Pujar al repositori remot els nostres canvis
+
+Basic reference
+---------------
+git status -s
+first column --> shows difference between committed and staged
+second column  --> shows difference between staged and unstaged
+
+
+git diff --> changes between staged and unstaged
+git diff --cached --> diff between committed and staged changes
+git diff HEAD --> diff between committed and unstaged
+--stat --> shorter summary of changes
+
+git commit --> commits all staged changes
+git commit -a --> commits all changes for all tracked files
+
+git reset HEAD -- file-name
+Unstage all staged changes for a file
+
+git rm --> removes file from staging area and also deletes the file
+git rm --cached --> removes the file from staging area but leaving it on the hard disk
+
+git branch --> lists all branches
+git branch branchname -->creates a new branch
+git checkout branchname --> switch to a new branch
+git checkout -b branchname --> create a new branch and shift to it
+git branch -d branchname --> delete a branch
+
+git log
+git log --oneline
+git log --oneline --graph
+git log --oneline branch1 ^branch2 --> logs in branch1 and not in branch2
+
+git tag -a --> add an annotated tag
+git tag -a commit-SHA --> tag a specific commit
+
+git remote --> list remotes
+git remote -v --> list remotes verbosely
+git remote add <remote-name> git@github.com:<username>/<reponame>.git --> add a github remote
+git remote rm remote-name --> delete a remote
+
+git fetch remote-name
+git pull remote-name = git fetch + git merge

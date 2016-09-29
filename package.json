@@ -1,0 +1,9 @@
+{
+  "devDependencies": {
+    "browserify": "10.2.3",
+    "gulp": "3.8.11",
+    "gulp-browserify": "0.5.1",    
+    "http-status": "0.1.8",
+    "underscore": "1.5.2"
+  }
+}
