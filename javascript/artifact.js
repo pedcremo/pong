@@ -10,7 +10,7 @@ var Artifact = function (id_artifact) {
 
   this.imgObj = document.getElementById(id_artifact);
   this.state = "stop"; //startdbl,startclick
-  this.speed = 5;
+  this.speed = 3;
   var self=this; //Artifici per fer funcionar setInterval
   this.getArtifactSelf = function(){return self;};
 
