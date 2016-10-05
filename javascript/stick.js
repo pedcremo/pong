@@ -19,10 +19,11 @@ function Stick(id_stick,side,context) {
     function(e){
       y= (window.Event) ? e.pageY : event.clientY + (document.documentElement.scrollLeft ? document.documentElement.scrollLeft : document.body.scrollLeft);
       self.locate(self.gap,y);
-    },
+  },
     false);
 	//Posicionem stick a les coordenades x,y
 	this.locate = function(x,y){
+        if (y>(this.context.vpHeight-this.imgObj.height)) y=this.context.vpHeight-this.imgObj.height; 
 		this.x=x;this.y=y;
 		this.imgObj.style[this.side] = (Math.round(x))+ 'px';
 		this.imgObj.style.top = (Math.round(y)) + 'px';
