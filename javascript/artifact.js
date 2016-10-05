@@ -6,14 +6,15 @@
   *
  */
 
-var Artifact = function (id_artifact) {
+var Artifact = function (id_artifact,context) {
 
   this.imgObj = document.getElementById(id_artifact);
   this.state = "stop"; //startdbl,startclick
   this.speed = 3;
+  this.context = context;
   var self=this; //Artifici per fer funcionar setInterval
   this.getArtifactSelf = function(){return self;};
-
+  
   this.directions={
     NORTH:{dirX:0,dirY:-1},
     SOUTH:{dirX:0,dirY:1},
@@ -39,11 +40,11 @@ Artifact.prototype.move = function(){
 //Posicionem Bola de manera absoluta en X i Y i comprovem llímits
 Artifact.prototype.locate = function(x,y){
     //Ens eixim per dalt o per baix
-    if (y<=0 || y>=this.vpHeight-this.imgObj.height) {
+    if (y<=0 || y>=this.context.vpHeight-this.imgObj.height) {
         this.dirY=this.dirY*(-1);
     }
     //Ens eixim per dreta o esquerre
-    if (x<=0 || x>=this.vpWidth-this.imgObj.width) this.dirX=this.dirX*(-1);
+    if (x<=0 || x>=this.context.vpWidth-this.imgObj.width) this.dirX=this.dirX*(-1);
 
     this.imgObj.style.left = (Math.round(x))+ 'px';
     this.imgObj.style.top = (Math.round(y)) + 'px';
@@ -53,11 +54,14 @@ Artifact.prototype.locate = function(x,y){
  //Sortejem direcció i comencem a moure la pola
  Artifact.prototype.start = function(){
     var self=this.getArtifactSelf();
+    self.state = "run";
+    self.setDirection("NORTH_WEST");
     animate=setInterval(function(){self.move();}, 5);
  };
 
  //Parem la bola
  Artifact.prototype.stop = function(){
+     this.state = "stop";
      clearTimeout(animate);
  };
 
