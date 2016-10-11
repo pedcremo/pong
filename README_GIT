@@ -10,9 +10,9 @@ git pull https://github.com/pedcremo/pong.git
 
 git branches
 ------------
-v1 branch
+versio_0 branch
   A simple ball could be moved in three event triggered ways. Click, double click and keypress
-v2 branch
+versio_1 branch
   A ball with stick bouncing recognition. We play in single player mode
 
 
