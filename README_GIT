@@ -78,6 +78,7 @@ git branch branchname -->creates a new branch
 git checkout branchname --> switch to a new branch
 git checkout -b branchname --> create a new branch and shift to it
 git branch -d branchname --> delete a branch
+git push
 
 git log
 git log --oneline
