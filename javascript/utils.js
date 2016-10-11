@@ -1,3 +1,6 @@
+/**
+ *  Used to avoid image double click selection default behaviour 
+ */
 function clearSelection() {
      if(document.selection && document.selection.empty) {
          document.selection.empty();

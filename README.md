@@ -18,6 +18,4 @@ frontend$ ./node_modules/gulp/bin/gulp.js browserify
 
 Result will be  bin/index.js file embedding all project .js
 
-We are using nodeJS ecosystem in this project in an unusual way. Only for client
-web development. Uning requirejs module to be able to architect our project in a more
-scalable way.
+We are using nodeJS ecosystem in this project in an unusual way. Only for client web development. Using requirejs useful module to be able to architect our project in a morescalable way.

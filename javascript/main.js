@@ -1,16 +1,15 @@
 /**
- * Our app is a closure
- *
+ *  Pong  entry script
  *
  */
 
 var utils = require('./utils');
-var context = require('./context');
+var singletonContext = require('./patterns/singleton/singletonContext');
 
-//Once page has been completely loaded. Including images. We start the game
+//Once the page has been completely loaded. Including images. We start the game
 window.onload=function(){
 
-    var context_ = new context();
+    var context_ = singletonContext.getInstance();
 
     var startGame=function(event){
         event.preventDefault();
