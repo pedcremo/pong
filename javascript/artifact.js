@@ -12,7 +12,7 @@ var Artifact = function (id_artifact,context_) {
 
   this.imgObj = document.getElementById(id_artifact);
   this.state = "stop"; //startdbl,startclick
-  this.speed = 1;
+  this.speed = 5; //1 - 20;
   this.context = context_;
   var self=this; //Artifici per fer funcionar setInterval
   this.getArtifactSelf = function(){return self;};
@@ -42,6 +42,7 @@ Artifact.prototype.setDirection = function(CARDINAL_POINT){
 Artifact.prototype.move = function(){
        //if (this.state=="runvertical") this.dirX=0;
        this.locate(parseInt(this.imgObj.style.left)+(this.dirX*this.speed),parseInt(this.imgObj.style.top)+(this.dirY*this.speed));
+       //this.locate(parseInt(this.imgObj.style.left)+(this.dirX),parseInt(this.imgObj.style.top)+(this.dirY));
  }; //End move method
 
 Artifact.prototype.getPosition = function(){
@@ -62,7 +63,11 @@ Artifact.prototype.locate = function(x,y){
 
     this.imgObj.style.left = (Math.round(x))+ 'px';
     this.imgObj.style.top = (Math.round(y)) + 'px';
-    if (x<=60) this.Notify(this);
+
+    
+    this.Notify(this);
+
+    //if (x<=60 || x>=(this.context.vpWidth-60)) this.Notify(this);
  }; //End locate method
 
  //Sortejem direcció i comencem a moure la pola
@@ -70,7 +75,7 @@ Artifact.prototype.locate = function(x,y){
     var self=this.getArtifactSelf();
     self.state = "run";
     self.setDirection("NORTH_WEST");
-    animate=setInterval(function(){self.move();}, 5);
+    animate=setInterval(function(){self.move();}, 8);
  };
 
  //Parem la bola

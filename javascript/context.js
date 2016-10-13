@@ -17,7 +17,8 @@ function Context(){
   this.state = "stop"; //STOP OR RUN
   this.ball = new artifact("bola",this);
   this.stick = new stick("stick","left",this);
-  //We put ball in the middle of the screen 
+  this.stick2 = new stick("stick2","right",this,true);
+  //We put ball in the middle of the screen
   this.ball.locate((this.vpWidth/2)-this.ball.imgObj.width,(this.vpHeight/2)-this.ball.imgObj.height);  //Posicionem pilota al mig
 }
 
