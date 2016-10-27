@@ -5,15 +5,17 @@
  * @this {Artifact}
   *
  */
-
+ "use strict";
+var animate = undefined;
 var subject = require('./patterns/observer/Subject');
 
 var Artifact = function (id_artifact,context_) {
 
   this.imgObj = document.getElementById(id_artifact);
   this.state = "stop"; //startdbl,startclick
-  this.speed = 5; //1 - 20;
+  this.speed = 7; //1 - 20;
   this.context = context_;
+  this.imgObj.width = this.context.vpHeight*0.05;
   var self=this; //Artifici per fer funcionar setInterval
   this.getArtifactSelf = function(){return self;};
 
@@ -27,11 +29,9 @@ var Artifact = function (id_artifact,context_) {
     SOUTH_WEST:{dirX:-1,dirY:1},
     NORTH_WEST:{dirX:-1,dirY:-1},
   };
-
-
 }; //END  Ball prototype constructor
 
-//Heretem de subject
+//Heretem de subject (REVIEW IS NOT PROPER)
 Artifact.prototype = new subject();
 
 Artifact.prototype.setDirection = function(CARDINAL_POINT){
@@ -40,10 +40,8 @@ Artifact.prototype.setDirection = function(CARDINAL_POINT){
 };
 //Meneja la bola
 Artifact.prototype.move = function(){
-       //if (this.state=="runvertical") this.dirX=0;
        this.locate(parseInt(this.imgObj.style.left)+(this.dirX*this.speed),parseInt(this.imgObj.style.top)+(this.dirY*this.speed));
-       //this.locate(parseInt(this.imgObj.style.left)+(this.dirX),parseInt(this.imgObj.style.top)+(this.dirY));
- }; //End move method
+}; //End move method
 
 Artifact.prototype.getPosition = function(){
      return {x:parseInt(this.imgObj.style.left),y:parseInt(this.imgObj.style.top)};
@@ -64,10 +62,7 @@ Artifact.prototype.locate = function(x,y){
     this.imgObj.style.left = (Math.round(x))+ 'px';
     this.imgObj.style.top = (Math.round(y)) + 'px';
 
-    
     this.Notify(this);
-
-    //if (x<=60 || x>=(this.context.vpWidth-60)) this.Notify(this);
  }; //End locate method
 
  //Sortejem direcció i comencem a moure la pola

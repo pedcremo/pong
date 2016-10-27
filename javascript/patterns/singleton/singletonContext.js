@@ -1,6 +1,7 @@
 /**
- *  Singleton patter aplied to context 
+ *  Singleton patter aplied to context
  */
+"use strict";
 
 var context = require('./../../context');
 

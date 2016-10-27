@@ -2,6 +2,7 @@
  *  Pong  entry script
  *
  */
+"use strict";
 
 var utils = require('./utils');
 var singletonContext = require('./patterns/singleton/singletonContext');
@@ -21,5 +22,12 @@ window.onload=function(){
         }
     };
 
-    window.addEventListener("keypress",startGame,false);
+    utils.checkCookie(function(){  window.addEventListener("keypress",startGame,false);});
+    //On resize we restart context to adjust game elements to new viewport
+    window.onresize = function() {
+        context_.restart();
+    };
+
+
+
 };
