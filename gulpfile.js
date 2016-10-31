@@ -9,5 +9,8 @@ gulp.task('browserify', function() {
 });
 
 gulp.task('watch', function() {
-  gulp.watch(['./javascript/*.js'], ['browserify']);
+  gulp.watch(['./javascript/*.js',
+            './javascript/patterns/observer/*.js',
+            './javascript/patterns/singleton/*.js'],
+             ['browserify']);
 });

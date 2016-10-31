@@ -2,11 +2,39 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <script type="text/javascript" src="bin/main.js"></script>
+<link rel="stylesheet" type="text/css" href="styles/classic.css">
 </head>
 <body>
+<!-- Game elements -->
+<img id="bola" style="position:absolute" src="images/squareWhite.png" />
+<img id="stick" style="position:absolute" src="images/stickWhite.png" />
+<h2 id="playerLeft"></h2>
+<img id="stick2" style="position:absolute" src="images/stickWhite.png" />
+<h2 id="playerRight">v</h2>
+<div id="vertical"></div>
 
-<img id="bola" style="position:absolute" src="images/ball5.gif" />
-<img id="stick" style="position:absolute" src="images/stick.png" />
 
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <div class="modal-header">
+      <span class="close">X</span>
+      <h2>Personal profile</h2>
+    </div>
+    <div class="modal-body">
+      <form id="form1" runat="server">
+        Nickname:<input type='text' id="nickname_" /><br>
+        ProfilePicture:<input type='file' id="imgProfile" />
+        <img width="48px" height="64px" id="blah" src="#" alt="your image" />
+      </form>
+    </div>
+    <div class="modal-footer">
+      <h5>This information is stored only on client side</h5>
+    </div>
+  </div>
+
+</div>
 </body>
 </html>

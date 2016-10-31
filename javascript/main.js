@@ -1,16 +1,16 @@
 /**
- * Our app is a closure
- *
+ *  Pong  entry script
  *
  */
+"use strict";
 
 var utils = require('./utils');
-var context = require('./context');
+var singletonContext = require('./patterns/singleton/singletonContext');
 
-//Once page has been completely loaded. Including images. We start the game
+//Once the page has been completely loaded. Including images. We start the game
 window.onload=function(){
 
-    var context_ = new context();
+    var context_ = singletonContext.getInstance();
 
     var startGame=function(event){
         event.preventDefault();
@@ -22,5 +22,12 @@ window.onload=function(){
         }
     };
 
-    window.addEventListener("keypress",startGame,false);
+    utils.checkCookie(function(){  window.addEventListener("keypress",startGame,false);});
+    //On resize we restart context to adjust game elements to new viewport
+    window.onresize = function() {
+        context_.restart();
+    };
+
+
+
 };

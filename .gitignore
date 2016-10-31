@@ -12,3 +12,4 @@ Thumbs.db
 #############################
 bin/
 node_modules/
+/nbproject/private/

@@ -8,6 +8,12 @@ Synchronization in order to be project up to date changes (You should perform it
 
 git pull https://github.com/pedcremo/pong.git
 
+git branches
+------------
+v1 branch
+  A simple ball could be moved in three event triggered ways. Click, double click and keypress
+v2 branch
+  A ball with stick bouncing recognition. We play in single player mode
 
 
 GIT USEFUL TUTORIALS FOR NEWBIES
