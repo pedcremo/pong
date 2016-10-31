@@ -46,8 +46,8 @@ function showPlayerProfile(){
     if (dataImage){
       var profileImg=document.createElement("img");
       profileImg.src = "data:image/png;base64," + dataImage;
-      profileImg.width=48;
-      profileImg.height=64;
+      profileImg.width=100;
+      profileImg.height=100;
       nicknameElement.parentNode.insertBefore(profileImg,nicknameElement);
     }
     return true;
@@ -66,6 +66,7 @@ function checkCookie(addGameKeyBindings) {
         // Get the modal
         var modal = document.getElementById('myModal');
         document.getElementById('blah').style.display="none";
+        document.getElementById('blah_2').style.display="none";
         // Get the <span> element that closes the modal
         var span = document.getElementsByClassName("close")[0];
         span.onclick = function() {
@@ -82,14 +83,18 @@ function checkCookie(addGameKeyBindings) {
             }
           }
         };
+        //bloquea el modal
         modal.style.display = "block";
 
+        //mete evenetos en el nickname 
         var nickname = document.getElementById("nickname_");
         nickname.addEventListener("change",function(){setCookie("username", nickname.value, 365);});
         nickname.addEventListener("blur",function(){setCookie("username", nickname.value, 365);});
         nickname.addEventListener("focus",function(){setCookie("username", nickname.value, 365);});
 
+        //coge la imagen del html file
         var imgProfile = document.getElementById("imgProfile");
+        //si cambia utiliza lafuncion readurl
         imgProfile.addEventListener("change",function(){readURL(this);});
     }
     document.getElementById("playerRight").innerHTML= "Computer";
@@ -109,18 +114,28 @@ function getBase64Image(img) {
 }
 
 function save(){
+    //aqui guardardamos la imagen oculta
   var bannerImage = document.getElementById('blah');
   var imgData = getBase64Image(bannerImage);
   localStorage.setItem("imgData", imgData);
 }
 
 function readURL(input) {
+    
   if (input.files && input.files[0]) {
-      document.getElementById('blah').style.display="block";
+      
+      //mostramos la foto escogida
+      document.getElementById('blah_2').style.display="block";
       var reader = new FileReader();
       reader.onload = function (e) {
-        document.getElementById("blah").src=e.target.result;
+          
+        //mete la foto en los elementos
+        document.getElementById("blah").src=e.target.result;  
+        document.getElementById("blah_2").src=e.target.result;
+        //
           //$('#blah').attr('src', e.target.result);
+          
+          //utiliza una funciona save para guardar la imagen en local storage
           save();
       };
       reader.readAsDataURL(input.files[0]);

@@ -26,6 +26,7 @@ window.onload=function(){
     //On resize we restart context to adjust game elements to new viewport
     window.onresize = function() {
         context_.restart();
+        //console.log("resize");
     };
 
 

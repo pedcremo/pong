@@ -16,6 +16,10 @@ function Context(){
   this.vpHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;//ViewportY
   this.score=0;
   this.state = "stop"; //STOP OR RUN
+  
+    this.ball = new artifact("bola",this);
+    this.stick = new stick("stick","left",this);
+    this.stick2 = new stick("stick2","right",this,true);
 
   this.restart();
 
@@ -28,14 +32,29 @@ function Context(){
   verticalSeparator.style="left:"+(this.vpWidth/2-verticalSeparatorWidth/2)+";border-left: "+verticalSeparatorWidth+"px dotted #444; ";
 */
 }
+
 Context.prototype.restart = function(){
+    
+    console.log("entramos en la funcion restart");
+    //console.log(this.vpWidth);
+    //console.log(this.vpHeight);
+    
     this.vpWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth; //ViewportX
     this.vpHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;//ViewportY
-    this.ball = new artifact("bola",this);
-    this.stick = new stick("stick","left",this);
-    this.stick2 = new stick("stick2","right",this,true);
+    //this.ball = new singletonArtifact.getInstance();
+    //this.ball = new artifact("bola",this);
+    //this.stick = new stick("stick","left",this);
+    //this.stick2 = new stick("stick2","right",this,true);
+    
+    this.ball.setImage();
+    this.stick.setImage();
+    this.stick2.setImage();
+    this.stick.setSide();
+    this.stick2.setSide();
+    
+    
     this.ball.locate((this.vpWidth/2)-(this.ball.imgObj.width/2),(this.vpHeight/2)-this.ball.imgObj.height);
-
+    
     //We put ball in the middle of the screen
     //this.ball.locate((this.vpWidth/2)-(this.ball.imgObj.width/2),(this.vpHeight/2)-this.ball.imgObj.height);
     //Vertical dotted separator decoration
