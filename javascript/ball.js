@@ -1,5 +1,5 @@
 /**
-   prototype we bounce an image on screen
+ *   Ball prototype. We bounce an image on screen representing the ball
  *
  * @constructor
  * @this {Ball}
@@ -11,15 +11,15 @@ var subject = require('./patterns/observer/Subject');
 
 var Ball = function (id_Ball,context_) {
 
-  this.imgObj = document.getElementById(id_Ball);
+  this.imageBallView = document.getElementById(id_Ball);
   this.state = "stop"; //startdbl,startclick
   this.speed = 7; //1 - 20;
   this.context = context_;
-  this.imgObj.width = this.context.vpHeight*0.05;
-  var self=this; //Artifici per fer funcionar setInterval
+  this.imageBallView.width = this.context.viewPortHeight*0.05;
+  var self = this; //Artifici per fer funcionar setInterval
   this.getBallSelf = function(){return self;};
 
-  this.directions={
+  this.directions = {
     NORTH:{dirX:0,dirY:-1},
     SOUTH:{dirX:0,dirY:1},
     EAST:{dirX:1,dirY:0},
@@ -31,49 +31,54 @@ var Ball = function (id_Ball,context_) {
   };
 }; //END  Ball prototype constructor
 
-//Heretem de subject (REVIEW IS NOT PROPER)
+//Ball inherits from subject (WARNING: REVIEW THIS CODE. IS NOT PROPER)
 Ball.prototype = new subject();
 
 Ball.prototype.setDirection = function(CARDINAL_POINT){
     this.dirX = this.directions[CARDINAL_POINT].dirX;
     this.dirY = this.directions[CARDINAL_POINT].dirY;
 };
-//Meneja la bola
-Ball.prototype.move = function(){
-       this.locate(parseInt(this.imgObj.style.left)+(this.dirX*this.speed),parseInt(this.imgObj.style.top)+(this.dirY*this.speed));
-}; //End move method
 
-Ball.prototype.getPosition = function(){
-     return {x:parseInt(this.imgObj.style.left),y:parseInt(this.imgObj.style.top)};
+//We move the ball to the next point
+Ball.prototype.move = function(){
+       this.locate(parseInt(this.imageBallView.style.left)+(this.dirX*this.speed),parseInt(this.imageBallView.style.top)+(this.dirY*this.speed));
 };
 
-Ball.prototype.rebota = function(){
+//Get ball coordinates
+Ball.prototype.getPosition = function(){
+     return {x:parseInt(this.imageBallView.style.left),y:parseInt(this.imageBallView.style.top)};
+};
+
+//Simply change direction sense. If we implement multi direction ball it should be a little bit more complicated
+Ball.prototype.bounce = function(){
     this.dirX=this.dirX*(-1);
 };
-//Posicionem Bola de manera absoluta en X i Y i comprovem llímits
+
+//We put ball in X,Y coordinates and check boundaries in order to change direction
 Ball.prototype.locate = function(x,y){
-    //Ens eixim per dalt o per baix
-    if (y<=0 || y>=this.context.vpHeight-this.imgObj.height) {
+    //Ball get out of boundaries from top or bottom
+    if (y<=0 || y>=this.context.viewPortHeight-this.imageBallView.height) {
         this.dirY=this.dirY*(-1);
     }
-    //Ens eixim per dreta o esquerre
-    if (x<=0 || x>=this.context.vpWidth-this.imgObj.width) this.dirX=this.dirX*(-1);
+    //Ball get out of boundaries on right or left side
+    if (x<=0 || x>=this.context.viewPortWidth-this.imageBallView.width) this.dirX=this.dirX*(-1);
 
-    this.imgObj.style.left = (Math.round(x))+ 'px';
-    this.imgObj.style.top = (Math.round(y)) + 'px';
+    this.imageBallView.style.left = (Math.round(x))+ 'px';
+    this.imageBallView.style.top = (Math.round(y)) + 'px';
 
+    //Ball notifies all observers she has been moving to the next point (WARNING: IT COULD BE OPTIMIZED)
     this.Notify(this);
- }; //End locate method
+ };
 
- //Sortejem direcció i comencem a moure la pola
+ //We should RAMDOMLY (NOT YET) choose ball direction and start moving from her current position
  Ball.prototype.start = function(){
-    var self=this.getBallSelf();
+    var self = this.getBallSelf();
     self.state = "run";
     self.setDirection("NORTH_WEST");
     animate=setInterval(function(){self.move();}, 8);
  };
 
- //Parem la bola
+ //Stop the ball
  Ball.prototype.stop = function(){
      this.state = "stop";
      clearTimeout(animate);
