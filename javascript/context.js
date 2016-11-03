@@ -1,6 +1,6 @@
 /**
  * Context prototype.
- * With this object (Singleton) by the way. We manage game context: points, on/off, artifacts location
+ * With this object (Singleton) by the way. We manage game context: points, on/off, balls location
  * on screen. It is a bridge to reach all objects that compose the game
  *
  * @constructor
@@ -8,7 +8,7 @@
  */
 "use strict";
 
-var artifact = require('./artifact');
+var ball = require('./ball'); 
 var stick = require('./stick');
 
 function Context(){
@@ -26,7 +26,7 @@ Context.prototype.restart = function(){
       this.ball.RemoveObserver(this.stick2);
     }
 
-    this.ball = new artifact("bola",this);
+    this.ball = new ball("bola",this);
     this.stick = new stick("stick","left",this);
     this.stick2 = new stick("stick2","right",this,true);
 

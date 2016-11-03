@@ -1,33 +1,30 @@
 /**
- *  Pong  entry script
+ *  Pong entry script
  *
  */
 "use strict";
 
-var utils = require('./utils');
+var utils = require('./utils'); 
+//Prototype where all game objects are present and could be accessed
 var singletonContext = require('./patterns/singleton/singletonContext');
 
-//Once the page has been completely loaded. Including images. We start the game
+//Once the page has been completely loaded. Including images. We start the game logic
 window.onload=function(){
 
-    var context_ = singletonContext.getInstance();
+    var GameContext_ = singletonContext.getInstance();
 
-    var startGame=function(event){
-        event.preventDefault();
-        utils.clearSelection();
-        if (context_.state.match("run")){
-          context_.stop();
+    var startOrStopGame=function(event){
+        if (GameContext_.state.match("run")){
+          GameContext_.stop();
         }else{
-          context_.start();
+          GameContext_.start();
         }
     };
-
-    utils.checkCookie(function(){  window.addEventListener("keypress",startGame,false);});
-    //On resize we restart context to adjust game elements to new viewport
+    //We check if player has chosen a nickname(mandatory) and a Picture Profile (optional). We store them as cookie and LocalStorage respectively
+    //If there is not profile we can start the game otherwise we can start or stop the game pressing any key
+    utils.checkIfProfileHasBeenDefined(function(){  window.addEventListener("keypress",startOrStopGame,false);});
+    //On resize we restart context to resize and realocate game elements in a new viewport
     window.onresize = function() {
-        context_.restart();
+        GameContext_.restart();
     };
-
-
-
 };

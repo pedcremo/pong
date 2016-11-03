@@ -4,14 +4,14 @@
 
 "use strict";
 
-function clearSelection() {
+/*function clearSelection() {
      if(document.selection && document.selection.empty) {
          document.selection.empty();
      } else if(window.getSelection) {
          var sel = window.getSelection();
          sel.removeAllRanges();
      }
- }
+ }*/
 
 function setCookie(cname, cvalue, exdays) {
     if (cvalue && cvalue!== ""){
@@ -56,7 +56,7 @@ function showPlayerProfile(){
   }
 }
 
-function checkCookie(addGameKeyBindings) {
+function checkIfProfileHasBeenDefined(addGameKeyBindings) {
 
     var user = getCookie("username");
     if (user !== "") {
@@ -90,11 +90,13 @@ function checkCookie(addGameKeyBindings) {
         nickname.addEventListener("focus",function(){setCookie("username", nickname.value, 365);});
 
         var imgProfile = document.getElementById("imgProfile");
-        imgProfile.addEventListener("change",function(){readURL(this);});
+        imgProfile.addEventListener("change",function(){readFileAndPreviewFromLocalFileSystem(this);});
     }
     document.getElementById("playerRight").innerHTML= "Computer";
 }
 
+//Encode an image using base64 previously to store it on LocalStorage
+//Note: In HTML the img tag can load an image pointing src attribute to an URL or putting there the image in base64
 function getBase64Image(img) {
     var canvas = document.createElement("canvas");
     canvas.width = img.width;
@@ -108,24 +110,25 @@ function getBase64Image(img) {
     return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
 }
 
-function save(){
+//We convert before saving to base64
+function saveImageToLocalStorage(){
   var bannerImage = document.getElementById('blah');
   var imgData = getBase64Image(bannerImage);
   localStorage.setItem("imgData", imgData);
 }
 
-function readURL(input) {
+//We choose a image profile from local system and we do a preview
+function readFileAndPreviewFromLocalFileSystem(input) {
   if (input.files && input.files[0]) {
       document.getElementById('blah').style.display="block";
       var reader = new FileReader();
       reader.onload = function (e) {
         document.getElementById("blah").src=e.target.result;
-          //$('#blah').attr('src', e.target.result);
-          save();
+        saveImageToLocalStorage();
       };
       reader.readAsDataURL(input.files[0]);
   }
 }
 
- module.exports.clearSelection = clearSelection;
- module.exports.checkCookie = checkCookie;
+ //module.exports.clearSelection = clearSelection;
+ module.exports.checkIfProfileHasBeenDefined = checkIfProfileHasBeenDefined;
