@@ -9,7 +9,7 @@ var utils = require('./utils');
 var singletonContext = require('./patterns/singleton/singletonContext');
 
 //Once the page has been completely loaded. Including images. We start the game logic
-window.onload=function(){
+window.onload=function(){  
 
     var GameContext_ = singletonContext.getInstance();
 

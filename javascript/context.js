@@ -21,21 +21,22 @@ Context.prototype.restart = function(){
     this.viewPortWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth; //ViewportX
     this.viewPortHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;//ViewportY
 
-    if (this.ball) {
-      this.ball.RemoveObserver(this.stick);
-      this.ball.RemoveObserver(this.stick2);
+    if (this.ball && this.stick && this.stick2) {
+      this.ball.scaleAndRealocate();
+      this.stick.scaleAndRealocate();
+      this.stick2.scaleAndRealocate();
+    }else{
+      this.ball = new ball("bola",this);
+      this.stick = new stick("stick","left",this);
+      this.stick2 = new stick("stick2","right",this,true);
     }
-
-    this.ball = new ball("bola",this);
-    this.stick = new stick("stick","left",this);
-    this.stick2 = new stick("stick2","right",this,true);
-
     //We put ball in the middle of the screen
     this.ball.locate((this.viewPortWidth/2)-(this.ball.imageBallView.width/2),(this.viewPortHeight/2)-this.ball.imageBallView.height);
     //Vertical dotted separator decoration
     var verticalSeparator = document.getElementById("vertical");
-    var verticalSeparatorWidth = this.viewPortWidth * 0.02;
-    verticalSeparator.style="left:"+(this.viewPortWidth/2-verticalSeparatorWidth/2)+";border-left: "+verticalSeparatorWidth+"px dotted #444; ";
+    var verticalSeparatorWidth = this.viewPortWidth * 0.02; 
+    verticalSeparator.setAttribute("style","left:"+(this.viewPortWidth/2-verticalSeparatorWidth/2)+";border-left: "+verticalSeparatorWidth+"px dotted #444; ");
+    //verticalSeparator.style="left:"+(this.viewPortWidth/2-verticalSeparatorWidth/2)+";border-left: "+verticalSeparatorWidth+"px dotted #444; ";
 
 };
 

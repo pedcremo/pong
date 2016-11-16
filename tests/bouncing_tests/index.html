@@ -1,0 +1,183 @@
+<html>
+
+<head>
+
+<style>
+html {
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+body {
+    background-color: white;
+}
+</style>
+
+</head>
+
+<body>
+<canvas id="myCanvas"  style="border:5px;"></canvas>
+
+<script>
+//Bresenham algorithm
+function calcStraightLine (startCoordinates, endCoordinates) {
+  var coordinatesArray = []; // new Array();
+  // Translate coordinates
+  var x1 = startCoordinates.x;
+  var y1 = startCoordinates.y;
+  var x2 = endCoordinates.x;
+  var y2 = endCoordinates.y;
+  // Define differences and error check
+  var dx = Math.abs(x2 - x1);
+  var dy = Math.abs(y2 - y1);
+  var sx = (x1 < x2) ? 1 : -1;
+  var sy = (y1 < y2) ? 1 : -1;
+  var err = dx - dy;
+  // Set first coordinates
+  coordinatesArray.push({y:y1,x:x1});
+  // Main loop
+  while (!((x1 == x2) && (y1 == y2))) {
+    var e2 = err << 1;
+    if (e2 > -dy) {
+      err -= dy;
+      x1 += sx;
+    }
+    if (e2 < dx) {
+      err += dx;
+      y1 += sy;
+    }
+    // Set coordinates
+    coordinatesArray.push({y:y1,x:x1});
+  }
+  // Return the result
+  return coordinatesArray;
+}
+
+var canvas = document.getElementById("myCanvas");
+canvas.width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+canvas.height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+var canvasWidth = canvas.width;
+var canvasHeight = canvas.height;
+var ctx = canvas.getContext("2d");
+var canvasData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
+
+// That's how you define the value of a pixel //
+function drawPixel (x, y, r, g, b, a) {
+    var index = (x + y * canvasWidth) * 4;
+
+    canvasData.data[index + 0] = r;
+    canvasData.data[index + 1] = g;
+    canvasData.data[index + 2] = b;
+    canvasData.data[index + 3] = a;
+}
+
+// That's how you update the canvas, so that your //
+// modification are taken in consideration //
+function updateCanvas() {
+    ctx.putImageData(canvasData, 0, 0);
+    ctx.font = "48px arial";
+    ctx.fillText(lastAngle +" degrees", 20, 50);
+
+}
+
+function getTanDeg(deg) {
+  var rad = deg * Math.PI/180;
+  return Math.tan(rad);
+}
+
+var startPoint = {x:Math.round(canvasWidth/2),y:Math.round(canvasHeight/2)};
+var angle = Math.floor((Math.random() * 360) + 1);
+
+//Ranges 10-60,120-170,210-260,300-360
+function getRandomAngle(){
+    var option = Math.floor((Math.random() * 4) + 1);
+    var result=0;
+    switch (option){
+        case 1:  result=Math.floor((Math.random() * 50) + 10);
+            break;
+        case 2:  result=Math.floor((Math.random() * 50) + 120);
+            break;
+        case 3:  result=Math.floor((Math.random() * 50) + 210);
+            break;
+        default:
+            result=Math.floor((Math.random() * 50) + 300);
+            break;
+    }
+    console.log(result+" degrees");
+    return result;
+}
+
+function getEndPoint(_startPoint,angle){
+    var c2 = 0;
+    var c1 = 0;
+
+    //First we calculate base catet (c2) because we are suposing we are bouncing top or bottom edges and
+    //we know C1 . If we discover C2 value is wrong then we know we are really bouncing left or right edge and
+    //we know C2 and we should calculate C1
+    var umbral = 0;
+    if (angle>=90 && angle <=270){
+        umbral = Math.abs(startPoint.x);
+    }else{
+        umbral = Math.abs(canvasWidth-_startPoint.x);
+    }
+    if (angle>=0 && angle <=180){
+        c2 = _startPoint.y/getTanDeg(angle);
+    }else{
+        c2 = (canvasHeight -_startPoint.y)/getTanDeg(angle);
+    }
+
+    if ((Math.abs(c2) > umbral) || (c2 == 0)) {
+        var c1 = getTanDeg(angle)* Math.abs(canvasWidth-_startPoint.x);
+        if ((angle >= 0 && angle <=90) || (angle >= 270 && angle <=360)) {
+            startPoint = {x:canvasWidth, y:Math.round(_startPoint.y-c1)};
+        }else{
+            c1 = getTanDeg(angle)* Math.abs(_startPoint.x);
+            startPoint = {x:0, y:Math.round(_startPoint.y+c1)};
+        }
+    }else{
+        if (angle >=180 && angle <=360){
+            startPoint = {x:Math.round(_startPoint.x-c2),y:canvasHeight};
+        }else{
+            startPoint = {x:Math.round(_startPoint.x+c2),y:0};
+        }
+    }
+    return startPoint;
+}
+
+
+function drawPoints(points){
+    var i = 0;
+    for (i=0;i<points.length;i++){
+        drawPixel(points[i].x,points[i].y,255,0,0,255);
+    }
+    updateCanvas();
+}
+var lastAngle = getRandomAngle();
+drawPoints(calcStraightLine(startPoint,getEndPoint(startPoint,lastAngle)));
+
+function reflection(reflectionPoint,angle){
+    var reflectionAngle = (360 - angle); //If we bounce top or bottom edge
+    if (angle >=0 && angle <=180 ){
+        if ((reflectionPoint.x == 0) || (reflectionPoint.x == canvasWidth)){
+            reflectionAngle = (180 - angle);
+        }
+    }else{
+        if ((reflectionPoint.x == canvasWidth) || (reflectionPoint.x == 0)){
+            reflectionAngle = (270 - (angle-270));
+        }
+    }
+    return reflectionAngle;
+}
+
+setInterval(function(){
+        lastAngle = reflection(startPoint,lastAngle);
+        console.log("StartPoint: x:"+startPoint.x+",y:"+startPoint.y+" Reflection:"+lastAngle)
+        drawPoints(calcStraightLine(startPoint,getEndPoint(startPoint,lastAngle)));
+    }
+    ,2000)
+
+
+</script>
+
+</body>
+
+</html>
