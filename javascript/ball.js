@@ -1,85 +1,80 @@
+ "use strict";
+ /*jslint browser:true */
+ /*jslint node:true */
+
+var subject = require('./patterns/observer/Subject');
 /**
- *   Ball prototype. We bounce an image on screen representing the ball
+ * Ball prototype. We bounce an image on screen representing the ball
  *
  * @constructor
- * @this {Ball}
-  *
+ * @param {string} id_Ball - html id property identifiyng ball
+ * @param {Context} context_ - An instance of game context that let you traverse all game objects
+ * @tutorial bouncing-ball-tutorial
  */
- "use strict";
-var animate = undefined;
-var subject = require('./patterns/observer/Subject');
-var withBounceController = require ('./controllers/bounceController');
 
 var Ball = function (id_Ball,context_) {
   this.imageBallView = document.getElementById(id_Ball);
   this.state = "stop"; //startdbl,startclick
-  this.speed = 10; //1 - 20;
-  this.angleDirection; //Direction
+
+  this.ballX = 0; this.ballY = 0;   // position
+  this.ballVx = 0; this.ballVy = 0; // velocity & direction
+
   this.context = context_;
   this.imageBallView.width = this.context.viewPortHeight*0.05;
-  var self = this; //Artifici per fer funcionar setInterval
-  this.getBallSelf = function(){return self;};
+};
 
-  withBounceController
-}; //END  Ball prototype constructor
-
-//Ball inherits from subject (WARNING: REVIEW THIS CODE. IS NOT PROPER)
+/** Ball inherits from subject (WARNING: REVIEW THIS CODE. IS NOT PROPER) */
 Ball.prototype = new subject();
 
 Ball.prototype.scaleAndRealocate = function(){
   this.imageBallView.width = this.context.viewPortHeight*0.05;
 };
 
-//We move the ball to the next point
-Ball.prototype.move = function(){
-       var nextPoint = withBounceController.bounceController.getNextPoint();
-       this.locate(nextPoint.x,nextPoint.y);
-};
-
-//Get ball coordinates
+/** Get ball coordinates */
 Ball.prototype.getPosition = function(){
      return {x:parseInt(this.imageBallView.style.left),y:parseInt(this.imageBallView.style.top)};
 };
 
-//Simply change direction sense. If we implement multi direction ball it should be a little bit more complicated
-Ball.prototype.bounce = function(stickCollision,angleCorrection){
-      withBounceController.bounceController.recalculatePath(stickCollision,angleCorrection);
+/** Simply change direction sense. If we implement multi direction ball it should be a little bit more complicated
+*   @param {number} stickRelativeBallHitPoint - If we hit on upper middle stick percentage positive otherwise negative we use this value to change ballVy
+*/
+Ball.prototype.bounce = function(stickRelativeBallHitPoint){
+      this.ballVy += (stickRelativeBallHitPoint/100);
+      if (this.ballVy > 1) this.ballVy = 1;
+      if (this.ballVy < -1) this.ballVy = -1;
+      this.ballVx = -this.ballVx;
 };
 
-//We put ball in X,Y coordinates and check boundaries in order to change direction
+/** We put ball in X,Y coordinates and check boundaries in order to change direction */
 Ball.prototype.locate = function(x,y){
+    this.ballX = x;
+    this.ballY = y;
     //Ball get out of boundaries from top or bottom
-    if (y<=0 || y>=this.context.viewPortHeight-this.imageBallView.height) {
-        //this.dirY=this.dirY*(-1);
-        this.bounce(false,0);
-    }
-    //Ball get out of boundaries on right or left side
-    if (x<=0 || x>=this.context.viewPortWidth-this.imageBallView.width) {
-        //this.dirX=this.dirX*(-1);
-        this.bounce(false,0);
+    if (y<=0 || y>=this.context.viewPortHeight-this.imageBallView.height){
+        //If we reach top or bottom and directions have not been yet inverted we do it.We avoid bug with multiple bouncings on edge
+        if ( (y <= 0 && this.ballVy <0 ) || (y>=this.context.viewPortHeight-this.imageBallView.height && this.ballVy >0) )
+            this.ballVy = -this.ballVy;
     }
 
     this.imageBallView.style.left = (Math.round(x))+ 'px';
     this.imageBallView.style.top = (Math.round(y)) + 'px';
 
-    //Ball notifies all observers she has been moving to the next point (WARNING: IT COULD BE OPTIMIZED)
-    this.Notify(this);  
+    //Ball notifies all observers if is below 25% viewport width or 75% onwards
+
+    if (x<((25*this.context.viewPortWidth)/100) || x> ((75*this.context.viewPortWidth)/100))
+        this.Notify(this);
  };
 
-//We should RAMDOMLY (NOT YET) choose ball direction and start moving from her current position
-Ball.prototype.start = function(){
-    var self = this.getBallSelf();
-    self.state = "run";
-    withBounceController.bounceController.gameContext = this.context;
-    withBounceController.bounceController.getDepartureRandomAngle();
-    //withBounceController.bounceController.recalculatePath(this.context,false);
-    animate=setInterval(function(){self.move();}, 8);
-};
+/** We RAMDOMLY choose ball direction and speed
+* in thi method try not allow angles greater than 45 degreen in any
+* of the four quarters
+*/
+Ball.prototype.ramdomDepartureAngle = function(){
+    this.ballVx = 1;
+    this.ballVy = Math.round(Math.random() * 100)/100;
 
-//Stop the ball
-Ball.prototype.stop = function(){
-     this.state = "stop";
-     clearTimeout(animate);
+    if (Math.round(Math.random()) === 0) this.ballVx = -this.ballVx;
+    if (Math.round(Math.random()) === 0) this.ballVy = -this.ballVy;
 };
 
 module.exports = Ball;

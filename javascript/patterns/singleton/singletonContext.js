@@ -1,8 +1,11 @@
-/**
- *  Singleton patter aplied to context
- */
 "use strict";
 
+/*jslint browser:true */
+/*jslint node:true */
+
+/**
+ *  Singleton pattern aplied to context
+ */
 var context = require('./../../context');
 
 var SingletonContext = (function () {

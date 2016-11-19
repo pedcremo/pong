@@ -1,6 +1,8 @@
 var gulp = require('gulp');
 var browserify = require('gulp-browserify');
 var Server = require('karma').Server;
+var jsdoc = require('gulp-jsdoc3');
+
 
 gulp.task('browserify', function() {
   return gulp.
@@ -28,4 +30,11 @@ gulp.task('tdd', function (done) {
   new Server({
     configFile: __dirname + '/karma.conf.js',
   }, done).start();
+});
+
+gulp.task('doc', function (cb) {
+    var config = require('./jsdoc.json');
+    gulp.src(['README.md','README_GIT', './javascript/**/*.js'], {read: false})
+    //gulp.src(['./javascript/ball.js'], {read: false})
+        .pipe(jsdoc(config, cb));
 });

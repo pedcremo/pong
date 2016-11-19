@@ -1,5 +1,12 @@
 //http://www.codeproject.com/Articles/13914/Observer-Design-Pattern-Using-JavaScript
 "use strict";
+/*jslint node:true */
+
+/**
+ * Subject module.
+ * @module Subject
+ * @see module:Subject
+ */
 
 var arraylist = require('./ArrayList');
 
@@ -17,7 +24,7 @@ Subject.prototype.Notify = function( context )
       this.observers.GetAt(i).Update( context );
 };
 
-Subject.prototype.getCountRajoles = function(  )
+/*Subject.prototype.getCountRajoles = function(  )
 {
    var m_count = this.observers.Count();
    var cont=0;
@@ -26,7 +33,7 @@ Subject.prototype.getCountRajoles = function(  )
    		//alert(this.observers.GetAt(i).getClass());
    }
    return cont;
-};
+};*/
 
 Subject.prototype.AddObserver = function( observer )
 {

@@ -1,15 +1,18 @@
 "use strict";
-//We import Observer (pattern) because the stick it will observe ball movements
+/*jslint browser:true */
+/*jslint node:true */
+
 var withObserver = require('./patterns/observer/Observer');
 
-/*
- * Crea una instància de Stick.
- * Amb aquest objecte creem la barra que el jugador té que controlar per fer rebotar la bola al sobre i no perdre vides
+/**
+ * Create an instance of Stick.
+ * This object let you move vertically using mouse pointer movements and hit the ball.
  *
  * @constructor
- * @this {Stick}
- * @param {id_stick} ,sideLocation {left or right}
- *
+ * @param {string} id_stick - HTML Id attribute used to identify the stick
+ * @param {string} sideLocation - Possivle values "left" or "right"
+ * @param {Context} context - An instance of game context that let you traverse all game objects
+ * @param {boolean} autopilot - If true computer manage stick movement
  */
 
 function Stick(id_stick,sideLocation,context,autopilot) {
@@ -20,16 +23,25 @@ function Stick(id_stick,sideLocation,context,autopilot) {
   this.gap = 50;    //Distance in pixels from sideLocation
   this.context = context;
   this.imageStickView.height = this.context.viewPortHeight*0.2;
-  this.sideLocation == "left"?this.imageStickView.style.left=this.gap+'px':this.imageStickView.style.left=this.context.viewPortWidth-this.imageStickView.width-this.gap;
+
+  this.stickY = 0;   // position
+  this.stickVy = 0; // velocity & direction
+
+  if (this.sideLocation == "left"){
+      this.locate(this.gap,Math.round(this.context.viewPortHeight/2));
+  }else{
+      //this.imageStickView.style.left=this.context.viewPortWidth-this.imageStickView.width-this.gap;
+      this.locate(this.context.viewPortWidth-this.imageStickView.width-this.gap,Math.round(this.context.viewPortHeight/2));
+  }
 
   var self = this;
-  //We inherit from observer using this functional mixin its a formality because Observer is a kind of abstract class
+  /** We inherit from observer using this functional mixin its a formality because Observer is a kind of abstract class */
   withObserver.call(Stick.prototype);
-  //We enroll stick as a ball observer
+  /** We enroll stick as a ball observer */
   this.context.ball.AddObserver(this);
 
   if (! this.autopilot){
-      //We move stick on y axis following mouse pointer location
+      /** We move stick on y axis following mouse pointer location */
       window.addEventListener("mousemove",
         function(e){
           var y= (window.Event) ? e.pageY : event.clientY + (document.documentElement.scrollLeft ? document.documentElement.scrollLeft : document.body.scrollLeft);
@@ -37,31 +49,27 @@ function Stick(id_stick,sideLocation,context,autopilot) {
       },false);
   }
 
-  //As an Observer we should implement this mandatory method. Called
-  //everytime the object we observe (in this case ball) call to Notify Subject method
+  /** As an Observer we should implement this mandatory method. Called
+  *   everytime the object we observe (in this case ball) call to Notify Subject method
+  */
   this.Update = function (ball){
       var ballPosition = ball.getPosition();
       var stickPosition = this.getPosition();
 
-      if (this.autopilot) this.locate(stickPosition.x,(ballPosition.y-(Math.round(Math.random()))));
-      //var limit=this.context.viewPortHeight - this.gap - ball.imageStickView.width;
-      var ballCloseStickLeft = (this.sideLocation=="left" && ballPosition.x<=stickPosition.x+this.imageStickView.width);
-      var ballCloseStickRight = (this.sideLocation=="right" && ballPosition.x+ball.imageBallView.width>=stickPosition.x);
+      var ballCloseStickLeftAndTowardsIt = (this.sideLocation == "left" && ((ballPosition.x + ball.ballVx) <= stickPosition.x+this.imageStickView.width) && ball.ballVx < 0);
+      var ballCloseStickRightAndTowardsIt = (this.sideLocation == "right" && ((ballPosition.x + ball.ballVx + ball.imageBallView.width) >= stickPosition.x)) && ball.ballVx > 0;
 
-      if (  ballCloseStickLeft || ballCloseStickRight) {
+      if (  ballCloseStickLeftAndTowardsIt || ballCloseStickRightAndTowardsIt) {
           var distance = (stickPosition.y+this.imageStickView.height/2)-(ballPosition.y+ball.imageBallView.height/2);
           var minDistAllowed = (this.imageStickView.height/2+ball.imageBallView.height/2);
           if (Math.abs(distance) < minDistAllowed) {
-                if (ballCloseStickLeft && (ball.angleDirection>=90 && ball.angleDirection<=270)  ){
-                    ball.bounce(true,-distance);
-                }
-                if (ballCloseStickRight && ((ball.angleDirection>=0 && ball.angleDirection<=90) || (ball.angleDirection>=270 && ball.angleDirection<=360) )  ){
-                    //ball.bounce(true,Math.round(distance/2));
-                    ball.bounce(true,distance);
-                }
+                /*if (ballCloseStickLeftAndTowardsIt) {
+                    if (ballPosition.x < (stickPosition.x+this.imageStickView.width)) console.log("MEGDE");
+                }*/                
+                ball.bounce(distance*100/minDistAllowed);
 
           }else{
-            if ((ballPosition.x < this.gap) || (ballPosition.x > this.context.viewPortWidth - this.gap)){
+            if ((ballPosition.x <= 0) || (ballPosition.x >= this.context.viewPortWidth)){
                 this.context.stop();
                 if (this.sideLocation=="left"){
                     this.context.stick2.increaseScore();
@@ -74,7 +82,10 @@ function Stick(id_stick,sideLocation,context,autopilot) {
           }
       }
   };
-}// End Prototype
+}
+
+
+/** Increase stick player owner score in one point */
 Stick.prototype.increaseScore = function(){
      this.score+=1;
      var scoreEl = document.getElementById("scorePlayerLeft");
@@ -84,21 +95,28 @@ Stick.prototype.increaseScore = function(){
      scoreEl.innerHTML = this.score;
 };
 
+/** For scaling game objects (ball, sticks ...) when viewport changes*/
 Stick.prototype.scaleAndRealocate = function(){
   this.imageStickView.height = this.context.viewPortHeight*0.2;
-  this.sideLocation == "left"?this.imageStickView.style.left=this.gap+'px':this.imageStickView.style.left=this.context.viewPortWidth-this.imageStickView.width-this.gap;
-}
-//Draw and locate stick on screen using x,y coordinates
-Stick.prototype.locate = function(x,y){
-    if (y>(this.context.viewPortHeight-this.imageStickView.height)) y=this.context.viewPortHeight-this.imageStickView.height;
-    this.imageStickView.style.left = (Math.round(x))+ 'px';
-    this.imageStickView.style.top = (Math.round(y)) + 'px';
+  if (this.sideLocation == "left"){
+    this.imageStickView.style.left=this.gap+'px';
+  }else{
+    this.imageStickView.style.left=this.context.viewPortWidth-this.imageStickView.width-this.gap;
+  }
 };
 
-//Get stick x,y position on screen
+/** Draw and locate stick on screen using x,y coordinates */
+Stick.prototype.locate = function(x,y){
+    this.stickY = y;
+    if (this.stickY>(this.context.viewPortHeight-this.imageStickView.height)) this.stickY=this.context.viewPortHeight-this.imageStickView.height;
+    this.imageStickView.style.left = (Math.round(x))+ 'px';
+    this.imageStickView.style.top = (Math.round(this.stickY)) + 'px';
+};
+
+/** Get stick x,y pixel location on screen */
 Stick.prototype.getPosition = function(){
      return {x:parseInt(this.imageStickView.style.left),y:parseInt(this.imageStickView.style.top)};
 };
 
-//We export whole prototype
+/** We export whole prototype */
 module.exports = Stick;

@@ -1,17 +1,12 @@
-/**
- *  Used to avoid image double click selection default behaviour
- */
-
 "use strict";
+/*jslint browser:true */
+/*jslint node:true */
 
-/*function clearSelection() {
-     if(document.selection && document.selection.empty) {
-         document.selection.empty();
-     } else if(window.getSelection) {
-         var sel = window.getSelection();
-         sel.removeAllRanges();
-     }
- }*/
+/**
+ * Utils module.
+ * @module utils
+ * @see module:utils
+ */
 
 function setCookie(cname, cvalue, exdays) {
     if (cvalue && cvalue!== ""){
@@ -130,7 +125,7 @@ function readFileAndPreviewFromLocalFileSystem(input) {
   }
 }
 
-function calcStraightLine (startCoordinates, endCoordinates) {
+/*function calcStraightLine (startCoordinates, endCoordinates) {
   var coordinatesArray = []; // new Array();
   // Translate coordinates
   var x1 = startCoordinates.x;
@@ -161,7 +156,8 @@ function calcStraightLine (startCoordinates, endCoordinates) {
   }
   // Return the result
   return coordinatesArray;
-}
+}*/
 
- //module.exports.clearSelection = clearSelection;
+
+ /** Before start any game we check if user has defined a profile. */
  module.exports.checkIfProfileHasBeenDefined = checkIfProfileHasBeenDefined;
