@@ -18,6 +18,8 @@ versio_3 branch
   Implemented profile form .Nickname and image profile. Nickname as cookie and image in LocalStorage
 versio_4 branch
   Implemented multi direction ball bouncing. No nice method. bounceController.js
+versio_5 branch
+  Nicer multi direction ball bouncing. Deleted bounceController.js. Added jasmine tests with karma and jsdoc3 for generating documentation automatically
 
 
 GIT USEFUL TUTORIALS FOR NEWBIES
@@ -55,6 +57,10 @@ Recommended reading http://git-scm.com/book/es/Git-en-entornos-distribuidos-Fluj
 2. "git add ." in order to add files modified in the current commit (not mandatory if we do "git commit -a -m "MESSAGE" because -a modifier adds to stage area modified files) and "git add FILE_NAME" to add new files
 3.  To perform a commit always recommended "git commit -a -m 'MESSAGE'" doing a descriptive as possible message.
 4. "git push" ("git push origin master" to upload changes to remote repo.
+
+BASIC BRANCHING AND MERGING
+---------------------------
+https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging
 
 Basic reference
 ---------------
