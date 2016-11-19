@@ -10,9 +10,9 @@
     "gulp-jsdoc3": "1.0.1",
     "http-status": "0.1.8",
     "underscore": "1.5.2"
-  }
+  },
 
-  "scripts": {    
+  "scripts": {
      "postinstall": "gulp browserify"
   }
 }
