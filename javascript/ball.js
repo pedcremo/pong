@@ -35,7 +35,7 @@ Ball.prototype.getPosition = function(){
      return {x:parseInt(this.imageBallView.style.left),y:parseInt(this.imageBallView.style.top)};
 };
 
-/** Simply change direction sense. If we implement multi direction ball it should be a little bit more complicated
+/** Simply change direction sense and do an angle correction depending where ball have hit the stick
 *   @param {number} stickRelativeBallHitPoint - If we hit on upper middle stick percentage positive otherwise negative we use this value to change ballVy
 */
 Ball.prototype.bounce = function(stickRelativeBallHitPoint){
@@ -51,7 +51,7 @@ Ball.prototype.locate = function(x,y){
     this.ballY = y;
     //Ball get out of boundaries from top or bottom
     if (y<=0 || y>=this.context.viewPortHeight-this.imageBallView.height){
-        //If we reach top or bottom and directions have not been yet inverted we do it.We avoid bug with multiple bouncings on edge
+        //If we reach top or bottom and directions have not been yet inverted we do it.We avoid annoying bug with multiple repeated bouncings on edges
         if ( (y <= 0 && this.ballVy <0 ) || (y>=this.context.viewPortHeight-this.imageBallView.height && this.ballVy >0) )
             this.ballVy = -this.ballVy;
     }
@@ -59,14 +59,14 @@ Ball.prototype.locate = function(x,y){
     this.imageBallView.style.left = (Math.round(x))+ 'px';
     this.imageBallView.style.top = (Math.round(y)) + 'px';
 
-    //Ball notifies all observers if is below 25% viewport width or 75% onwards
+    //Ball notifies all observers if is under 25% viewport width or 75% onwards
 
     if (x<((25*this.context.viewPortWidth)/100) || x> ((75*this.context.viewPortWidth)/100))
         this.Notify(this);
  };
 
 /** We RAMDOMLY choose ball direction and speed
-* in thi method try not allow angles greater than 45 degreen in any
+* in this method and try not allow angles greater than 45 degrees in any
 * of the four quarters
 */
 Ball.prototype.ramdomDepartureAngle = function(){

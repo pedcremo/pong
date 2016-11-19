@@ -8,8 +8,6 @@
  *  @version 0.0.1
  */
 
-
-
 /** Prototype where all game objects are present and could be accessed */
 var singletonContext = require('./patterns/singleton/singletonContext');
 /** Game utils */

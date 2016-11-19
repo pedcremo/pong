@@ -63,11 +63,7 @@ function Stick(id_stick,sideLocation,context,autopilot) {
           var distance = (stickPosition.y+this.imageStickView.height/2)-(ballPosition.y+ball.imageBallView.height/2);
           var minDistAllowed = (this.imageStickView.height/2+ball.imageBallView.height/2);
           if (Math.abs(distance) < minDistAllowed) {
-                /*if (ballCloseStickLeftAndTowardsIt) {
-                    if (ballPosition.x < (stickPosition.x+this.imageStickView.width)) console.log("MEGDE");
-                }*/                
                 ball.bounce(distance*100/minDistAllowed);
-
           }else{
             if ((ballPosition.x <= 0) || (ballPosition.x >= this.context.viewPortWidth)){
                 this.context.stop();
@@ -83,7 +79,6 @@ function Stick(id_stick,sideLocation,context,autopilot) {
       }
   };
 }
-
 
 /** Increase stick player owner score in one point */
 Stick.prototype.increaseScore = function(){

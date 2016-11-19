@@ -104,7 +104,6 @@ function getBase64Image(img) {
 
     return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
 }
-
 //We convert before saving to base64
 function saveImageToLocalStorage(){
   var bannerImage = document.getElementById('blah');
@@ -124,40 +123,5 @@ function readFileAndPreviewFromLocalFileSystem(input) {
       reader.readAsDataURL(input.files[0]);
   }
 }
-
-/*function calcStraightLine (startCoordinates, endCoordinates) {
-  var coordinatesArray = []; // new Array();
-  // Translate coordinates
-  var x1 = startCoordinates.x;
-  var y1 = startCoordinates.y;
-  var x2 = endCoordinates.x;
-  var y2 = endCoordinates.y;
-  // Define differences and error check
-  var dx = Math.abs(x2 - x1);
-  var dy = Math.abs(y2 - y1);
-  var sx = (x1 < x2) ? 1 : -1;
-  var sy = (y1 < y2) ? 1 : -1;
-  var err = dx - dy;
-  // Set first coordinates
-  coordinatesArray.push({y:y1,x:x1});
-  // Main loop
-  while (!((x1 == x2) && (y1 == y2))) {
-    var e2 = err << 1;
-    if (e2 > -dy) {
-      err -= dy;
-      x1 += sx;
-    }
-    if (e2 < dx) {
-      err += dx;
-      y1 += sy;
-    }
-    // Set coordinates
-    coordinatesArray.push({y:y1,x:x1});
-  }
-  // Return the result
-  return coordinatesArray;
-}*/
-
-
- /** Before start any game we check if user has defined a profile. */
+/** Before start any game we check if user has defined a profile. */
  module.exports.checkIfProfileHasBeenDefined = checkIfProfileHasBeenDefined;
