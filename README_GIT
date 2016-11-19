@@ -104,3 +104,18 @@ git remote rm remote-name --> delete a remote
 
 git fetch remote-name
 git pull remote-name = git fetch + git merge
+
+HEROKU INFO (https://devcenter.heroku.com/articles/mean-apps-restful-api)
+------------------------------------------------------------------------
+Heroku és el sistema escalable de hosting que hem usat per desplegar de manera còmoda aquest projecte.
+Tan sols cal anar desenvolupant i cada vegada que tinguem una versió estable fem un "git push heroku master" per
+publicar.
+Amb aquest sistema podriem escalar l'aplicació molt fàcilment si el tràfic que generarà ho requerira.
+Simplement ens constaria més diners al ms. Estem usant la regió Europea de heroku per a què la latència d'accés
+siga més curta.
+
+Cal instal·lar "heroku toolbelt" per tindre accés als comandaments que ens permeten gestionar
+aquest sistema de hosting.
+
+"heroku login"  //Iniciem sessió amb el nostre usuari heroku
+"heroku local web" //Desplegament de prova en local
