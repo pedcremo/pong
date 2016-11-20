@@ -1,11 +1,12 @@
 # PONG game using javascript and nodeJS with require
 
 ## Introduction
-
 We are going to implement PONG. One of first console games in history
 Take a look at [www.ponggame.org](http://www.ponggame.org/)
 
 We are using nodeJS ecosystem in this project in an unusual way. Only for client side web development. We use requirejs module very useful in order to architect our project in a more scalable way.
+
+DEMO: https://pong2.herokuapp.com/
 
 ## Run the project
 In order to run for first time the project , you should:

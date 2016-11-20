@@ -2,6 +2,7 @@
     "name": "PONG",
     "version": "1.0.0",
     "description": "A javascript PONG GAME",
+    "main": "backend/index.js",
     "engines": {
         "node": "4.1.1",
         "npm": "2.1.x"
