@@ -3,8 +3,8 @@
     "allowUnknownTags": true
   },
   "opts": {
-    "destination": "./documentation/gen",
-    
+    "destination": "./documentation",
+
     "recurse": true
   },
   "plugins": [

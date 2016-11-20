@@ -49,7 +49,7 @@ Ball.prototype.bounce = function(stickRelativeBallHitPoint){
 Ball.prototype.locate = function(x,y){
     this.ballX = x;
     this.ballY = y;
-    //Ball get out of boundaries from top or bottom
+    //Ball get out of boundaries in top or bottom edges
     if (y<=0 || y>=this.context.viewPortHeight-this.imageBallView.height){
         //If we reach top or bottom and directions have not been yet inverted we do it.We avoid annoying bug with multiple repeated bouncings on edges
         if ( (y <= 0 && this.ballVy <0 ) || (y>=this.context.viewPortHeight-this.imageBallView.height && this.ballVy >0) )
@@ -59,8 +59,7 @@ Ball.prototype.locate = function(x,y){
     this.imageBallView.style.left = (Math.round(x))+ 'px';
     this.imageBallView.style.top = (Math.round(y)) + 'px';
 
-    //Ball notifies all observers if is under 25% viewport width or 75% onwards
-
+    //Ball notifies all observers if is under 25% viewport width or 75% onwards. Think it twice! Do we need patterns overburden for this game?
     if (x<((25*this.context.viewPortWidth)/100) || x> ((75*this.context.viewPortWidth)/100))
         this.Notify(this);
  };
