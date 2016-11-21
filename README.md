@@ -38,6 +38,10 @@ The other files are only required for development purposes
 
 `./node_modules/gulp/bin/gulp.js doc`
 
-TODO
+
+## Deploy project automatically to heroku
+Everytime we do a push to master branch on github DEMO: https://pong2.herokuapp.com/ gets updated with latest changes. We have created an app on heroku and We've linked to our gitthub repository.
+
+##TODO
 
 NICE TO READ: https://www.devbridge.com/articles/dependency-injection-in-javascript/
