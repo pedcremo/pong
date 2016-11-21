@@ -8,8 +8,8 @@ describe('Users factory', function() {
     // An intentionally failing test. No code within expect() will never equal 4.
     expect("MERDA").toEqual("MERDA");
 
-    //var context = require('context');
-    var context_ = new Context();
-    expect(context_.ball.speed).toEqual(10);
+    var context = require('../frontend/javascript/context');
+    var context_ = new context();
+    //expect(context_.ball.speed).toEqual(1.4);
   });
 });

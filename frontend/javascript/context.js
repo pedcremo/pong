@@ -15,7 +15,7 @@ var animate;
 function Context(){
   this.score=0;
   this.state = "stop"; //STOP OR RUN
-  this.speed = 1.4  ; //1 - 20;
+  this.speed = 1.5  ; //1 - 20;
   this.restart();
   var self = this; //Trick to run setInterval properly
   this.getContextSelf = function(){return self;};
@@ -75,7 +75,7 @@ Context.prototype.animate =function(){
 /** Arificial intelligence behind stick movements when it is autopiloted by the computer */
 Context.prototype.processAI = function(stick_){
     var stickPos = stick_.getPosition();
-    var StickMAXSPEED = 5; //Max pixel speed per frame
+    var StickMAXSPEED = 10; //Max pixel speed per frame
     var stickVy = 1;
     var iamLeftStickAndBallIsCloseAndTowardsMe = (stick_.sideLocation === "left" && (this.ball.ballX < (this.viewPortWidth/2)) && (this.ball.ballVx < 0) );
     var iamRightStickAndBallIsCloseAndTowardsMe = (stick_.sideLocation === "right" && (this.ball.ballX > (this.viewPortWidth/2)) && (this.ball.ballVx > 0) );
