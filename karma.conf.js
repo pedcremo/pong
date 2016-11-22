@@ -1,12 +1,12 @@
 module.exports = function(config) {
   config.set({
-    frameworks: ['jasmine','browserify'],
+    frameworks: ['jasmine-jquery','jasmine','browserify'],
     reporters: ['spec'],
     browsers: ['PhantomJS'],
 
     files: [
       'frontend/bin/main.js',
-      'tests/test.js'
+      'tests/**/*.js'
     ],
     preprocessors: {
       'tests/**/*.js': [ 'browserify' ]

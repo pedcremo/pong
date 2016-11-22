@@ -2,7 +2,6 @@
  /*jslint browser:true */
  /*jslint node:true */
 
-var subject = require('./patterns/observer/Subject');
 /**
  * Ball prototype. We bounce an image on screen representing the ball
  *
@@ -22,9 +21,6 @@ var Ball = function (id_Ball,context_) {
   this.context = context_;
   this.imageBallView.width = this.context.viewPortHeight*0.05;
 };
-
-/** Ball inherits from subject (WARNING: REVIEW THIS CODE. IS NOT PROPER) */
-Ball.prototype = new subject();
 
 Ball.prototype.scaleAndRealocate = function(){
   this.imageBallView.width = this.context.viewPortHeight*0.05;
@@ -60,8 +56,10 @@ Ball.prototype.locate = function(x,y){
     this.imageBallView.style.top = (Math.round(y)) + 'px';
 
     //Ball notifies all observers if is under 25% viewport width or 75% onwards. Think it twice! Do we need patterns overburden for this game?
-    if (x<((25*this.context.viewPortWidth)/100) || x> ((75*this.context.viewPortWidth)/100))
-        this.Notify(this);
+    if (x<((25*this.context.viewPortWidth)/100) || x> ((75*this.context.viewPortWidth)/100)){
+        this.context.stick.Update(this);
+        this.context.stick2.Update(this);
+    }
  };
 
 /** We RAMDOMLY choose ball direction and speed

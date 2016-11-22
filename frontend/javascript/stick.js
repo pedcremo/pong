@@ -2,7 +2,7 @@
 /*jslint browser:true */
 /*jslint node:true */
 
-var withObserver = require('./patterns/observer/Observer');
+//var withObserver = require('./patterns/observer/Observer');
 
 /**
  * Create an instance of Stick.
@@ -10,7 +10,7 @@ var withObserver = require('./patterns/observer/Observer');
  *
  * @constructor
  * @param {string} id_stick - HTML Id attribute used to identify the stick
- * @param {string} sideLocation - Possivle values "left" or "right"
+ * @param {string} sideLocation - Possible values "left" or "right"
  * @param {Context} context - An instance of game context that let you traverse all game objects
  * @param {boolean} autopilot - If true computer manage stick movement
  */
@@ -36,9 +36,9 @@ function Stick(id_stick,sideLocation,context,autopilot) {
 
   var self = this;
   /** We inherit from observer using this functional mixin its a formality because Observer is a kind of abstract class */
-  withObserver.call(Stick.prototype);
+  //withObserver.call(Stick.prototype);
   /** We enroll stick as a ball observer */
-  this.context.ball.AddObserver(this);
+  //this.context.ball.AddObserver(this);
 
   if (! this.autopilot){
       /** We move stick on y axis following mouse pointer location */
