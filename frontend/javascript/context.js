@@ -32,7 +32,7 @@ Context.prototype.restart = function(){
       this.stick2.scaleAndRealocate();
     }else{
       this.ball = new ball("bola",this);
-      this.stick = new stick("stick","left",this);
+      this.stick = new stick("stick","left",this,true);
       this.stick2 = new stick("stick2","right",this,true);
     }
 

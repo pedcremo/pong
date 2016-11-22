@@ -52,4 +52,14 @@ describe('Stick testing bench', function() {
     stickPosition = this.stick_.getPosition();
     expect(stickPosition.y).toEqual(this.contextMock.viewPortHeight-this.stick_.imageStickView.height);
   });
+
+  it('Testing Stick score', function() {
+    this.stick_.increaseScore();
+    expect(this.stick_.score).toEqual(1);
+    this.stick_.increaseScore();
+    this.stick_.increaseScore();
+    expect(this.stick_.score).toEqual(3);
+  });
+  it('Testing Stick rescale', function() {
+  });
 });
