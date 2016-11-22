@@ -15,7 +15,7 @@ var animate;
 function Context(){
   this.score=0;
   this.state = "stop"; //STOP OR RUN
-  this.speed = 1.5  ; //1 - 20;
+  this.speed = 1.5; //1 - 20;
   this.restart();
   var self = this; //Trick to run setInterval properly
   this.getContextSelf = function(){return self;};
@@ -32,7 +32,7 @@ Context.prototype.restart = function(){
       this.stick2.scaleAndRealocate();
     }else{
       this.ball = new ball("bola",this);
-      this.stick = new stick("stick","left",this,true);
+      this.stick = new stick("stick","left",this,false);
       this.stick2 = new stick("stick2","right",this,true);
     }
 
