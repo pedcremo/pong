@@ -15,7 +15,7 @@ var animate;
 function Context(){
   this.score=0;
   this.state = "stop"; //STOP OR RUN
-  this.speed = 1.5; //1 - 20;
+  this.speed = 1.8; //1 - 20;
   this.restart();
   var self = this; //Trick to run setInterval properly
   this.getContextSelf = function(){return self;};
@@ -25,14 +25,15 @@ function Context(){
 Context.prototype.restart = function(){
     this.viewPortWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth; //ViewportX
     this.viewPortHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;//ViewportY
-
+    this.speed = this.viewPortWidth/1000;
+    console.log(this.viewPortWidth+ " speed = "+this.speed);
     if (this.ball && this.stick && this.stick2) {
       this.ball.scaleAndRealocate();
       this.stick.scaleAndRealocate();
       this.stick2.scaleAndRealocate();
     }else{
       this.ball = new ball("bola",this);
-      this.stick = new stick("stick","left",this,false);
+      this.stick = new stick("stick","left",this,true);
       this.stick2 = new stick("stick2","right",this,true);
     }
 
@@ -52,6 +53,16 @@ Context.prototype.start = function(){
     self.ball.ramdomDepartureAngle();
     self.lastTime = new Date();
     animate=setInterval(function(){self.animate();}, 1);
+};
+
+/** Reset pong game scores*/
+Context.prototype.resetScores = function(){
+   this.stick.score = 0;
+   this.stick2.score = 0;
+   var scoreLeftEl = document.getElementById("scorePlayerLeft");
+   var scoreRightEl = document.getElementById("scorePlayerRight");
+   scoreLeftEl.innerHTML = this.stick.score;
+   scoreRightEl.innerHTML = this.stick2.score;
 };
 
 /** Stop pong game */

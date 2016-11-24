@@ -35,19 +35,28 @@ function Stick(id_stick,sideLocation,context,autopilot) {
   }
 
   var self = this;
-  /** We inherit from observer using this functional mixin its a formality because Observer is a kind of abstract class */
-  //withObserver.call(Stick.prototype);
-  /** We enroll stick as a ball observer */
-  //this.context.ball.AddObserver(this);
+ 
+  /** USED IN PCs: We move stick on y axis following mouse pointer location */
+  window.addEventListener("mousemove",
+    function(e){
+      var y= (window.Event) ? e.pageY : event.clientY + (document.documentElement.scrollLeft ? document.documentElement.scrollLeft : document.body.scrollLeft);
+      if (!self.autopilot) self.locate(self.x,y-(self.imageStickView.height/2));
+  },false);
 
-  if (! this.autopilot){
-      /** We move stick on y axis following mouse pointer location */
-      window.addEventListener("mousemove",
-        function(e){
-          var y= (window.Event) ? e.pageY : event.clientY + (document.documentElement.scrollLeft ? document.documentElement.scrollLeft : document.body.scrollLeft);
-          self.locate(self.x,y);
-      },false);
-  }
+  /** USED IN TABLETS AND SMARTPHONES: We move stick on y axis following finger touching location */
+  window.addEventListener("touchmove",
+    function(e){
+      var y=  e.touches[0].pageY;
+      //console.log("y = "+y);
+      if (!self.autopilot) self.locate(self.x,y-(self.imageStickView.height/2));
+  },false);
+
+  //Used in computers
+  this.imageStickView.addEventListener("mousedown",function(e){e.preventDefault();self.autopilot=false;});
+  window.addEventListener("mouseup",function(e){self.autopilot=true;});
+  //Used in tablets and smartphones
+  this.imageStickView.addEventListener("touchstart",function(e){e.preventDefault();self.autopilot=false;});
+  window.addEventListener("touchend",function(e){self.autopilot=true;});
 
   /** As an Observer we should implement this mandatory method. Called
   *   everytime the object we observe (in this case ball) call to Notify Subject method
@@ -69,9 +78,12 @@ function Stick(id_stick,sideLocation,context,autopilot) {
                 this.context.stop();
                 if (this.sideLocation=="left"){
                     this.context.stick2.increaseScore();
+                    if (this.context.stick2.score > 9) this.context.resetScores();
                 }else{
                     this.context.stick.increaseScore();
+                    if (this.context.stick.score > 9) this.context.resetScores();
                 }
+
                 //We locate ball on center
                 this.context.ball.locate((this.context.viewPortWidth/2)-this.context.ball.imageBallView.width,(this.context.viewPortHeight/2)-this.context.ball.imageBallView.height);  //Posicionem pilota al mig
             }
@@ -103,7 +115,8 @@ Stick.prototype.scaleAndRealocate = function(){
 /** Draw and locate stick on screen using x,y coordinates */
 Stick.prototype.locate = function(x,y){
     this.stickY = y;
-    if (this.stickY>(this.context.viewPortHeight-this.imageStickView.height)) this.stickY=this.context.viewPortHeight-this.imageStickView.height;
+    if (this.stickY < 0 ) this.stickY =0;
+    if (this.stickY > (this.context.viewPortHeight-this.imageStickView.height)) this.stickY=this.context.viewPortHeight-this.imageStickView.height;
     this.imageStickView.style.left = (Math.round(x))+ 'px';
     this.imageStickView.style.top = (Math.round(this.stickY)) + 'px';
 };
