@@ -2,11 +2,22 @@ html {
     overflow-x: hidden;
     overflow-y: hidden;
 }
+body {
+  color: white;
+}
 @font-face{
  font-family:'digital-clock-font';
  src: url('digital-7.ttf');
 }
-
+#banner {
+  position:absolute;
+  margin-left:-25%;
+  margin-rigth:auto;
+  width:70%;
+  bottom:5%;
+  left:50%;
+  color: white;
+}
 #scorePlayerLeft{
     margin:0px;
     position:absolute;

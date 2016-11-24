@@ -45,6 +45,19 @@ Context.prototype.restart = function(){
     verticalSeparator.setAttribute("style","left:"+(this.viewPortWidth/2-verticalSeparatorWidth/2)+";border-left: "+verticalSeparatorWidth+"px dotted #444; ");
 };
 
+Context.prototype.showBanner = function(message,millis){
+   var  bannerEl = document.getElementById("banner");
+   bannerEl.style.display = "block";
+   bannerEl.innerHTML = message;
+   if (millis !== 0)
+    setInterval(this.hideBanner,millis);
+};
+
+/** Hide game informative Banner */
+Context.prototype.hideBanner = function(){
+    var  bannerEl = document.getElementById("banner");
+    bannerEl.style.display = "none";
+};
 /** Start pong game */
 Context.prototype.start = function(){
     //this.state = "run";
@@ -69,7 +82,8 @@ Context.prototype.resetScores = function(){
 Context.prototype.stop = function(){
     this.state = "stop";
     clearTimeout(animate);
-    if (this.stick.autopilot && this.stick2.autopilot) this.start();
+    //if (this.stick.autopilot && this.stick2.autopilot) this.start();
+    this.start();
 };
 
 /** Animate one new game frame */

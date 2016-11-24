@@ -35,7 +35,7 @@ function Stick(id_stick,sideLocation,context,autopilot) {
   }
 
   var self = this;
- 
+
   /** USED IN PCs: We move stick on y axis following mouse pointer location */
   window.addEventListener("mousemove",
     function(e){
@@ -52,11 +52,11 @@ function Stick(id_stick,sideLocation,context,autopilot) {
   },false);
 
   //Used in computers
-  this.imageStickView.addEventListener("mousedown",function(e){e.preventDefault();self.autopilot=false;});
-  window.addEventListener("mouseup",function(e){self.autopilot=true;});
+  this.imageStickView.addEventListener("mousedown",function(e){e.preventDefault();self.autopilot=false;self.context.hideBanner()});
+  window.addEventListener("mouseup",function(e){self.autopilot=true;self.context.showBanner("You should drag any stick with mouse or finger if you want to controll it")});
   //Used in tablets and smartphones
-  this.imageStickView.addEventListener("touchstart",function(e){e.preventDefault();self.autopilot=false;});
-  window.addEventListener("touchend",function(e){self.autopilot=true;});
+  this.imageStickView.addEventListener("touchstart",function(e){e.preventDefault();self.autopilot=false;self.context.hideBanner()});
+  window.addEventListener("touchend",function(e){self.autopilot=true;self.context.showBanner("You should drag any stick with mouse or finger if you want to controll it")});
 
   /** As an Observer we should implement this mandatory method. Called
   *   everytime the object we observe (in this case ball) call to Notify Subject method
