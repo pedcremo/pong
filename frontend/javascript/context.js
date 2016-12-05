@@ -4,6 +4,7 @@
 
 var ball = require('./ball');
 var stick = require('./stick');
+
 var animate;
 /**
  * Context prototype.
@@ -18,9 +19,25 @@ function Context(){
   this.speed = 1.8; //1 - 20;
   this.restart();
   var self = this; //Trick to run setInterval properly
+  this.initWebSockets();
+
   this.getContextSelf = function(){return self;};
+  //If both paddles are autopilot we start the game directly
   if (this.stick.autopilot && this.stick2.autopilot) this.start();
 }
+
+Context.prototype.initWebSockets = function(){
+    this.socket = io(); //Third party lib loaded on html not included with require
+
+
+    this.socket.on('stick id and position',function(msg){
+        console.log(msg);
+    });
+    this.socket.on('ball position',function(msg){
+        console.log(msg);
+    });
+};
+
 /** Restart pong game after a resizing event*/
 Context.prototype.restart = function(){
     this.viewPortWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth; //ViewportX
@@ -49,7 +66,7 @@ Context.prototype.showBanner = function(message,millis){
    var  bannerEl = document.getElementById("banner");
    bannerEl.style.display = "block";
    bannerEl.innerHTML = message;
-   if (millis !== 0)
+   if (millis && (millis !== 0))
     setInterval(this.hideBanner,millis);
 };
 
@@ -58,6 +75,7 @@ Context.prototype.hideBanner = function(){
     var  bannerEl = document.getElementById("banner");
     bannerEl.style.display = "none";
 };
+
 /** Start pong game */
 Context.prototype.start = function(){
     //this.state = "run";
@@ -90,6 +108,7 @@ Context.prototype.stop = function(){
 Context.prototype.animate =function(){
     if (this.stick.autopilot) this.processAI(this.stick);
     if (this.stick2.autopilot) this.processAI(this.stick2);
+
     var currTime = new Date();
     var millis = currTime.getTime() - this.lastTime.getTime();
     this.lastTime = currTime;

@@ -116,9 +116,17 @@ Stick.prototype.scaleAndRealocate = function(){
 Stick.prototype.locate = function(x,y){
     this.stickY = y;
     if (this.stickY < 0 ) this.stickY =0;
-    if (this.stickY > (this.context.viewPortHeight-this.imageStickView.height)) this.stickY=this.context.viewPortHeight-this.imageStickView.height;
+    if (this.stickY > (this.context.viewPortHeight - this.imageStickView.height)) this.stickY = this.context.viewPortHeight - this.imageStickView.height;
     this.imageStickView.style.left = (Math.round(x))+ 'px';
     this.imageStickView.style.top = (Math.round(this.stickY)) + 'px';
+
+    if (!this.autopilot){
+        var newPosition = this.getPosition();
+        if (this.oldPosition !== newPosition){         
+         this.context.socket.emit("stick id and position","{stick:''"+this.sideLocation+"'"+JSON.stringify(newPosition)+"}");
+        }
+    }
+    this.oldPosition  = this.getPosition();
 };
 
 /** Get stick x,y pixel location on screen */

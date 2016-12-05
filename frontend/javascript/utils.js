@@ -58,34 +58,37 @@ function checkIfProfileHasBeenDefined(addGameKeyBindings) {
         showPlayerProfile();
         addGameKeyBindings();
     } else {
-        // Get the modal
-        var modal = document.getElementById('myModal');
-        document.getElementById('blah').style.display="none";
-        // Get the <span> element that closes the modal
-        var span = document.getElementsByClassName("close")[0];
-        span.onclick = function() {
-            if (showPlayerProfile()){
-              modal.style.display = "none";
-              addGameKeyBindings();
-            }
-        };
-        window.onclick = function(event) {
-          if (event.target == modal) {
-            if (showPlayerProfile()){
-              modal.style.display = "none";
-              addGameKeyBindings();
-            }
-          }
-        };
-        modal.style.display = "block";
+        $.get("template/modal-player-profile",function(data,status){
+                $('body').append(data);
+                // Get the modal
+                var modal = document.getElementById('myModal');
+                document.getElementById('blah').style.display="none";
+                // Get the <span> element that closes the modal
+                var span = document.getElementsByClassName("close")[0];
+                span.onclick = function() {
+                    if (showPlayerProfile()){
+                      modal.style.display = "none";
+                      addGameKeyBindings();
+                    }
+                };
+                window.onclick = function(event) {
+                  if (event.target == modal) {
+                    if (showPlayerProfile()){
+                      modal.style.display = "none";
+                      addGameKeyBindings();
+                    }
+                  }
+                };
+                modal.style.display = "block";
 
-        var nickname = document.getElementById("nickname_");
-        nickname.addEventListener("change",function(){setCookie("username", nickname.value, 365);});
-        nickname.addEventListener("blur",function(){setCookie("username", nickname.value, 365);});
-        nickname.addEventListener("focus",function(){setCookie("username", nickname.value, 365);});
+                var nickname = document.getElementById("nickname_");
+                nickname.addEventListener("change",function(){setCookie("username", nickname.value, 365);});
+                nickname.addEventListener("blur",function(){setCookie("username", nickname.value, 365);});
+                nickname.addEventListener("focus",function(){setCookie("username", nickname.value, 365);});
 
-        var imgProfile = document.getElementById("imgProfile");
-        imgProfile.addEventListener("change",function(){readFileAndPreviewFromLocalFileSystem(this);});
+                var imgProfile = document.getElementById("imgProfile");
+                imgProfile.addEventListener("change",function(){readFileAndPreviewFromLocalFileSystem(this);});
+         });
     }
     document.getElementById("playerRight").innerHTML= "Computer";
 }

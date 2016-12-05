@@ -3,7 +3,7 @@ var browserify = require('gulp-browserify');
 var Server = require('karma').Server;
 var jsdoc = require('gulp-jsdoc3');
 var spawn = require('child_process').spawn;
-var node;
+var node;  
 
 /**
  * $ gulp

@@ -15,8 +15,8 @@ describe('Stick testing bench', function() {
     document.body.insertAdjacentHTML(
       'afterbegin',
       fixture);
-
-    this.contextMock = {'viewPortWidth':200,'viewPortHeight':200};
+    //In this contextmock socket is a real socket.io object  
+    this.contextMock = {'viewPortWidth':200,'viewPortHeight':200,'socket':io()};
     var stick = require('../frontend/javascript/stick');
     this.stick_ = new stick("stick","left",this.contextMock,false);
   });

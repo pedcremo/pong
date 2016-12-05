@@ -5,6 +5,7 @@ module.exports = function(config) {
     browsers: ['PhantomJS'],
 
     files: [
+      'node_modules/socket.io-client/socket.io.js',
       'frontend/bin/main.js',
       'tests/**/*.js'
     ],

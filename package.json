@@ -28,7 +28,8 @@
         "browserify": "10.2.3",
         "gulp": "3.9.1",
         "gulp-browserify": "0.5.1",
-        "express": "4.12.3"
+        "express": "4.12.3",
+        "socket.io": "1.7.1"
     },
 
     "devDependencies": {
@@ -40,7 +41,7 @@
         "karma-jasmine-jquery": "0.1.1",
         "karma-phantomjs-launcher": "1.0.2",
         "karma-spec-reporter": "0.0.26",
-        "gulp-jsdoc3": "1.0.1",
+        "gulp-jsdoc3": "1.0.1",        
         "http-status": "0.1.8",
         "underscore": "1.5.2"
     }

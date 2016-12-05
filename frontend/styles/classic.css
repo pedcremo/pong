@@ -11,12 +11,15 @@ body {
 }
 #banner {
   position:absolute;
-  margin-left:-25%;
-  margin-rigth:auto;
-  width:70%;
-  bottom:5%;
-  left:50%;
+  font-size: 1.5em;
   color: white;
+  bottom:5%;
+  text-align:center;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  width: 800px; // Need a specific value to work
 }
 #scorePlayerLeft{
     margin:0px;
@@ -101,6 +104,16 @@ div#vertical{
     animation-duration: 0.4s
 }
 
+input.modal-body {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
 /* Add Animation */
 @-webkit-keyframes animatetop {
     from {top:-300px; opacity:0}
@@ -133,10 +146,13 @@ div#vertical{
     color: black;
 }
 
-.modal-body {padding: 2px 16px;}
+.modal-body {
+    padding: 20px 16px;
+    color:black;
+}
 
 .modal-footer {
-    padding: 2px 2px;
+    padding: 2px 20px;
     background-color: lightgray;
     color: black;
 }
