@@ -73,6 +73,7 @@ function Stick(id_stick,sideLocation,context,autopilot) {
           var minDistAllowed = (this.imageStickView.height/2+ball.imageBallView.height/2);
           if (Math.abs(distance) < minDistAllowed) {
                 ball.bounce(distance*100/minDistAllowed);
+                this.consecutiveHits+=1;
           }else{
             if ((ballPosition.x <= 0) || (ballPosition.x >= this.context.viewPortWidth)){
                 this.context.stop();
@@ -120,12 +121,12 @@ Stick.prototype.locate = function(x,y){
     this.imageStickView.style.left = (Math.round(x))+ 'px';
     this.imageStickView.style.top = (Math.round(this.stickY)) + 'px';
 
-    if (!this.autopilot){
+    /*if (!this.autopilot){
         var newPosition = this.getPosition();
-        if (this.oldPosition !== newPosition){         
+        if (this.oldPosition !== newPosition){
          this.context.socket.emit("stick id and position","{stick:''"+this.sideLocation+"'"+JSON.stringify(newPosition)+"}");
         }
-    }
+    }*/
     this.oldPosition  = this.getPosition();
 };
 

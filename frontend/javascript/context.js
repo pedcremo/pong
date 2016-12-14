@@ -17,6 +17,7 @@ function Context(){
   this.score=0;
   this.state = "stop"; //STOP OR RUN
   this.speed = 1.8; //1 - 20;
+  this.incSpeed = 0; //Dynamic speed increasing
   this.restart();
   var self = this; //Trick to run setInterval properly
   this.initWebSockets();
@@ -99,6 +100,9 @@ Context.prototype.resetScores = function(){
 /** Stop pong game */
 Context.prototype.stop = function(){
     this.state = "stop";
+    this.stick.consecutiveHits=0;
+    this.stick2.consecutiveHits=0;
+    this.incSpeed = 0;
     clearTimeout(animate);
     //if (this.stick.autopilot && this.stick2.autopilot) this.start();
     this.start();
@@ -113,7 +117,13 @@ Context.prototype.animate =function(){
     var millis = currTime.getTime() - this.lastTime.getTime();
     this.lastTime = currTime;
     var ball_ = this.ball;
-    ball_.locate(ball_.ballX + ((ball_.ballVx*millis)*this.speed) , ball_.ballY + ((ball_.ballVy*millis)*this.speed) );
+    if (this.stick.consecutiveHits>=4 || this.stick2.consecutiveHits>=4 ){
+        this.stick.consecutiveHits=0;
+        this.stick2.consecutiveHits=0;
+        this.incSpeed+=0.1;
+        console.log("incSpeed == "+this.incSpeed);
+    }
+    ball_.locate(ball_.ballX + ((ball_.ballVx*millis)*(this.speed+this.incSpeed)) , ball_.ballY + ((ball_.ballVy*millis)*(this.speed+this.incSpeed)) );
 };
 
 /** Arificial intelligence behind stick movements when it is autopiloted by the computer */

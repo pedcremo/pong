@@ -16,9 +16,10 @@ io.on('connection',function(socket){
     });
 });
 
-app.get('/template/modal-player-profile',function(req,res){
+app.get('/template/:template_name',function(req,res){
         console.log("HOLAAAA "+__dirname);
-        res.sendFile('templates/modal-player-profile.html', { root: __dirname });
+
+        res.sendFile('templates/'+req.params.template_name+'.html', { root: __dirname });
         //res.sendFile(__dirname+'/../frontend/templates/modal-player-profile.html');
 });
 

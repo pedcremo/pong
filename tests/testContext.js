@@ -78,4 +78,13 @@ describe('Context testing bench', function() {
       expect(bannerElement.style.display).toEqual("block");
   });
 
+  it('Speed increasing mechanism defined',function(){
+    expect(this.context_.increaseSpeed).toBeDefined();
+    expect(this.context_.incSpeed).toEqual(0)();
+  });
+  it('Speed increase works',function(){
+    this.context_.increaseSpeed();
+    expect(this.context_.incSpeed).toEqual(0.1)();
+  });
+
 });

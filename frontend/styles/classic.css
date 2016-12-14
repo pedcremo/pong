@@ -104,16 +104,6 @@ div#vertical{
     animation-duration: 0.4s
 }
 
-input.modal-body {
-    width: 100%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-
 /* Add Animation */
 @-webkit-keyframes animatetop {
     from {top:-300px; opacity:0}
@@ -155,4 +145,20 @@ input.modal-body {
     padding: 2px 20px;
     background-color: lightgray;
     color: black;
+}
+input.modal-body {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input.option{
+    width:100%;
+    font-size:2em;
+    height:10%;
+
 }
