@@ -1,7 +1,8 @@
  "use strict";
  /*jslint browser:true */
  /*jslint node:true */
-
+ /*global $ */
+ 
 /**
  * Ball prototype. We bounce an image on screen representing the ball
  *
@@ -12,23 +13,24 @@
  */
 
 var Ball = function (id_Ball,context_) {
-  this.imageBallView = document.getElementById(id_Ball);
+  this.$imageBallView = $("#"+id_Ball);
+
   this.state = "stop"; //startdbl,startclick
 
   this.ballX = 0; this.ballY = 0;   // position
   this.ballVx = 0; this.ballVy = 0; // velocity & direction
 
   this.context = context_;
-  this.imageBallView.width = this.context.viewPortHeight*0.05;
+  this.$imageBallView.width(this.context.viewPortHeight*0.05);
 };
 
 Ball.prototype.scaleAndRealocate = function(){
-  this.imageBallView.width = this.context.viewPortHeight*0.05;
+  this.$imageBallView.width(this.context.viewPortHeight*0.05);
 };
 
 /** Get ball coordinates */
 Ball.prototype.getPosition = function(){
-     return {x:parseInt(this.imageBallView.style.left),y:parseInt(this.imageBallView.style.top)};
+     return {x:parseInt(this.$imageBallView.css("left")),y:parseInt(this.$imageBallView.css("top"))};
 };
 
 /** Simply change direction sense and do an angle correction depending where ball have hit the stick
@@ -46,19 +48,19 @@ Ball.prototype.locate = function(x,y){
     this.ballX = x;
     this.ballY = y;
     //Ball get out of boundaries in top or bottom edges
-    if (y<=0 || y>=this.context.viewPortHeight-this.imageBallView.height){
+    if (y<=0 || y>=this.context.viewPortHeight-this.$imageBallView.height() ){
         //If we reach top or bottom and directions have not been yet inverted we do it.We avoid annoying bug with multiple repeated bouncings on edges
-        if ( (y <= 0 && this.ballVy <0 ) || (y>=this.context.viewPortHeight-this.imageBallView.height && this.ballVy >0) )
+        if ( (y <= 0 && this.ballVy <0 ) || (y>=this.context.viewPortHeight-this.$imageBallView.height()) && this.ballVy >0)
             this.ballVy = -this.ballVy;
     }
 
-    this.imageBallView.style.left = (Math.round(x))+ 'px';
-    this.imageBallView.style.top = (Math.round(y)) + 'px';
+    this.$imageBallView.css("left",(Math.round(x))+ 'px');
+    this.$imageBallView.css("top",(Math.round(y)) + 'px');
 
     //Ball notifies all observers if is under 25% viewport width or 75% onwards. Think it twice! Do we need patterns overburden for this game?
     if (x<((25*this.context.viewPortWidth)/100) || x> ((75*this.context.viewPortWidth)/100)){
-        this.context.stick.Update(this);
-        this.context.stick2.Update(this);
+        this.context.stickLeft.Update(this);
+        this.context.stickRight.Update(this);
     }
  };
 

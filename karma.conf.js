@@ -5,7 +5,10 @@ module.exports = function(config) {
     browsers: ['PhantomJS'],
 
     files: [
-      'node_modules/socket.io-client/dist/socket.io.js',
+      //'node_modules/socket.io-client/dist/socket.io.js',
+      'node_modules/socket.io/node_modules/socket.io-client/dist/socket.io.js',
+      'https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js',
+      'socket.io/socket.io.js',
       'frontend/bin/main.js',
       'tests/**/*.js'
     ],

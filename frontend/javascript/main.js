@@ -1,6 +1,7 @@
 "use strict";
 /*jslint browser:true */
 /*jslint node:true */
+/*global $ */
 
 /**
  *  Pong main entry script
@@ -27,22 +28,15 @@ window.onload=function(){
     };
     /** We check if player has chosen a nickname(mandatory) and a Picture Profile (optional). We store them as cookie and LocalStorage respectively
      If there is not profile we can not start the game otherwise we can start or stop the game pressing any key */
-    //utils.checkIfProfileHasBeenDefined(function(){  window.addEventListener("keypress",startOrStopGame,false);});
     utils.checkIfProfileHasBeenDefined(chooseGameMode);
-    /** On windows resize event we restart context to resize and realocate game elements into the new viewport */
-    window.onresize = function() {
+    $(window).resize(function(){
         GameContext_.restart();
-    };
+    });
 };
 function chooseGameMode(){
-    $.get("template/modal-game-mode",function(data,status){
-            $('body').append(data);
-            var modal = document.getElementById('modalGameMode');
-            modal.style.display = "block";
-            var singleplayer = document.getElementById('single');
-            singleplayer.onclick = function() {
-                  modal.style.display = "none";                  
-            };
+    utils.getModalTemplate("modal-game-mode",function($template){
+        $template.find("#single").click(function(){
+            $template.hide();
+        });
     });
-
 }

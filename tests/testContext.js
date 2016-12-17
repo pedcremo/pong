@@ -19,10 +19,10 @@ describe('Context testing bench', function() {
   // inject the HTML fixture for the tests
   beforeEach(function() {
     var fixture = '<div id ="fixture"><img id="bola" style="position:absolute" src="images/squareWhite.png" />'+
-    '<img id="stick" style="position:absolute" src="images/stickWhite.png" />'+
+    '<img id="stickLeft" style="position:absolute" src="images/stickWhite.png" />'+
     '<h2 id="playerLeft"></h2>'+
     '<p id="scorePlayerLeft">0</p>'+
-    '<img id="stick2" style="position:absolute" src="images/stickWhite.png" />'+
+    '<img id="stickRight" style="position:absolute" src="images/stickWhite.png" />'+
     '<h2 id="playerRight">v</h2>'+
     '<p id="scorePlayerRight">0</p><div id="vertical"></div>'+
     '<div id="banner" style="display:none"></div></div>';
@@ -75,16 +75,16 @@ describe('Context testing bench', function() {
       this.context_.showBanner("Dummy message2",0);
       var bannerElement = document.getElementById("banner");
       jasmine.clock().tick(13);
-      expect(bannerElement.style.display).toEqual("block");
+      expect(bannerElement.style.display).not.toEqual("none");
   });
 
   it('Speed increasing mechanism defined',function(){
     expect(this.context_.increaseSpeed).toBeDefined();
-    expect(this.context_.incSpeed).toEqual(0)();
+    expect(this.context_.incSpeed).toEqual(0);
   });
   it('Speed increase works',function(){
     this.context_.increaseSpeed();
-    expect(this.context_.incSpeed).toEqual(0.1)();
+    expect(this.context_.incSpeed).toEqual(0.1);
   });
 
 });

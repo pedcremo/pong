@@ -1,6 +1,7 @@
 "use strict";
 /*jslint browser:true */
 /*jslint node:true */
+/*global $ */
 
 var ball = require('./ball');
 var stick = require('./stick');
@@ -24,12 +25,11 @@ function Context(){
 
   this.getContextSelf = function(){return self;};
   //If both paddles are autopilot we start the game directly
-  if (this.stick.autopilot && this.stick2.autopilot) this.start();
+  if (this.stickLeft.autopilot && this.stickRight.autopilot) this.start();
 }
 
 Context.prototype.initWebSockets = function(){
     this.socket = io(); //Third party lib loaded on html not included with require
-
 
     this.socket.on('stick id and position',function(msg){
         console.log(msg);
@@ -41,45 +41,44 @@ Context.prototype.initWebSockets = function(){
 
 /** Restart pong game after a resizing event*/
 Context.prototype.restart = function(){
-    this.viewPortWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth; //ViewportX
-    this.viewPortHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;//ViewportY
+    this.viewPortWidth = $(window).innerWidth();
+    this.viewPortHeight = $(window).innerHeight();
     this.speed = this.viewPortWidth/1000;
     console.log(this.viewPortWidth+ " speed = "+this.speed);
-    if (this.ball && this.stick && this.stick2) {
+    if (this.ball && this.stickLeft && this.stickRight) {
       this.ball.scaleAndRealocate();
-      this.stick.scaleAndRealocate();
-      this.stick2.scaleAndRealocate();
+      this.stickLeft.scaleAndRealocate();
+      this.stickRight.scaleAndRealocate();
     }else{
       this.ball = new ball("bola",this);
-      this.stick = new stick("stick","left",this,true);
-      this.stick2 = new stick("stick2","right",this,true);
+      this.stickLeft = new stick("stickLeft","left",this,true);
+      this.stickRight = new stick("stickRight","right",this,true);
     }
 
     /** We put ball in the middle of the screen */
-    this.ball.locate((this.viewPortWidth/2)-(this.ball.imageBallView.width/2),(this.viewPortHeight/2)-this.ball.imageBallView.height);
+
+    this.ball.locate((this.viewPortWidth/2)-(this.ball.$imageBallView.width()/2),(this.viewPortHeight/2)-this.ball.$imageBallView.height());
     /** Vertical dotted separator decoration */
-    var verticalSeparator = document.getElementById("vertical");
     var verticalSeparatorWidth = this.viewPortWidth * 0.02;
-    verticalSeparator.setAttribute("style","left:"+(this.viewPortWidth/2-verticalSeparatorWidth/2)+";border-left: "+verticalSeparatorWidth+"px dotted #444; ");
+    $("#vertical").css({
+        "left":(this.viewPortWidth/2-verticalSeparatorWidth/2),
+        "border-left": verticalSeparatorWidth+"px dotted #444"
+    });
 };
 
 Context.prototype.showBanner = function(message,millis){
-   var  bannerEl = document.getElementById("banner");
-   bannerEl.style.display = "block";
-   bannerEl.innerHTML = message;
+   $("#banner").show().text(message);
    if (millis && (millis !== 0))
     setInterval(this.hideBanner,millis);
 };
 
 /** Hide game informative Banner */
 Context.prototype.hideBanner = function(){
-    var  bannerEl = document.getElementById("banner");
-    bannerEl.style.display = "none";
+    $("#banner").hide();
 };
 
 /** Start pong game */
 Context.prototype.start = function(){
-    //this.state = "run";
     var self = this.getContextSelf();
     self.state = "run";
     self.ball.ramdomDepartureAngle();
@@ -89,39 +88,42 @@ Context.prototype.start = function(){
 
 /** Reset pong game scores*/
 Context.prototype.resetScores = function(){
-   this.stick.score = 0;
-   this.stick2.score = 0;
-   var scoreLeftEl = document.getElementById("scorePlayerLeft");
-   var scoreRightEl = document.getElementById("scorePlayerRight");
-   scoreLeftEl.innerHTML = this.stick.score;
-   scoreRightEl.innerHTML = this.stick2.score;
+   this.stickLeft.score = 0;
+   this.stickRight.score = 0;
+
+   $("#scoreLeft").text(this.stickLeft.score);
+   $("#scoreRight").text(this.stickRight.score);
+
 };
 
 /** Stop pong game */
 Context.prototype.stop = function(){
     this.state = "stop";
-    this.stick.consecutiveHits=0;
-    this.stick2.consecutiveHits=0;
+    this.stickLeft.consecutiveHits=0;
+    this.stickRight.consecutiveHits=0;
     this.incSpeed = 0;
     clearTimeout(animate);
-    //if (this.stick.autopilot && this.stick2.autopilot) this.start();
+
     this.start();
 };
 
+Context.prototype.increaseSpeed = function(){
+        this.incSpeed+=0.1;
+};
 /** Animate one new game frame */
 Context.prototype.animate =function(){
-    if (this.stick.autopilot) this.processAI(this.stick);
-    if (this.stick2.autopilot) this.processAI(this.stick2);
+    if (this.stickLeft.autopilot) this.processAI(this.stickLeft);
+    if (this.stickRight.autopilot) this.processAI(this.stickRight);
 
     var currTime = new Date();
     var millis = currTime.getTime() - this.lastTime.getTime();
     this.lastTime = currTime;
     var ball_ = this.ball;
-    if (this.stick.consecutiveHits>=4 || this.stick2.consecutiveHits>=4 ){
-        this.stick.consecutiveHits=0;
-        this.stick2.consecutiveHits=0;
-        this.incSpeed+=0.1;
-        console.log("incSpeed == "+this.incSpeed);
+    if (this.stickLeft.consecutiveHits>=4 || this.stickRight.consecutiveHits>=4 ){
+        this.stickLeft.consecutiveHits=0;
+        this.stickRight.consecutiveHits=0;
+        this.increaseSpeed();
+        //console.log("incSpeed == "+this.incSpeed);
     }
     ball_.locate(ball_.ballX + ((ball_.ballVx*millis)*(this.speed+this.incSpeed)) , ball_.ballY + ((ball_.ballVy*millis)*(this.speed+this.incSpeed)) );
 };
@@ -135,10 +137,10 @@ Context.prototype.processAI = function(stick_){
     var iamRightStickAndBallIsCloseAndTowardsMe = (stick_.sideLocation === "right" && (this.ball.ballX > (this.viewPortWidth/2)) && (this.ball.ballVx > 0) );
 
     if (iamLeftStickAndBallIsCloseAndTowardsMe || iamRightStickAndBallIsCloseAndTowardsMe) {
-                var timeTilCollision = ((this.viewPortWidth-stick_.gap-stick_.imageStickView.width) - this.ball.ballX) / (this.ball.ballVx);
-                if (stick_.sideLocation === "left") timeTilCollision = ((stick_.imageStickView.width+stick_.gap) - this.ball.ballX) / (this.ball.ballVx);
+                var timeTilCollision = ((this.viewPortWidth-stick_.gap-stick_.$imageStickView.width()) - this.ball.ballX) / (this.ball.ballVx);
+                if (stick_.sideLocation === "left") timeTilCollision = ((stick_.$imageStickView.width()+stick_.gap) - this.ball.ballX) / (this.ball.ballVx);
 
-                var distanceWanted = (stickPos.y+(stick_.imageStickView.height/2)) - (this.ball.ballY+(this.ball.imageBallView.width/2));
+                var distanceWanted = (stickPos.y+(stick_.$imageStickView.height()/2)) - (this.ball.ballY+(this.ball.$imageBallView.width()/2));
                 var velocityWanted = -distanceWanted / timeTilCollision;
                 if(velocityWanted > StickMAXSPEED)
                     stickVy = StickMAXSPEED;
