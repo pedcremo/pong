@@ -2,7 +2,7 @@
  /*jslint browser:true */
  /*jslint node:true */
  /*global $ */
- 
+
 /**
  * Ball prototype. We bounce an image on screen representing the ball
  *
@@ -10,10 +10,11 @@
  * @param {string} id_Ball - html id property identifiyng ball
  * @param {Context} context_ - An instance of game context that let you traverse all game objects
  * @tutorial bouncing-ball-tutorial
- */
+ */ 
 
 var Ball = function (id_Ball,context_) {
   this.$imageBallView = $("#"+id_Ball);
+  this.bounceSound = new Audio('sounds/bounce.mp3'); //EXAM
 
   this.state = "stop"; //startdbl,startclick
 
@@ -37,10 +38,13 @@ Ball.prototype.getPosition = function(){
 *   @param {number} stickRelativeBallHitPoint - If we hit on upper middle stick percentage positive otherwise negative we use this value to change ballVy
 */
 Ball.prototype.bounce = function(stickRelativeBallHitPoint){
+      this.bounceSound.pause();//EXAM
+      this.bounceSound.currentTime = 0; //EXAM
       this.ballVy += (stickRelativeBallHitPoint/100);
       if (this.ballVy > 1) this.ballVy = 1;
       if (this.ballVy < -1) this.ballVy = -1;
       this.ballVx = -this.ballVx;
+      this.bounceSound.play();//EXAM
 };
 
 /** We put ball in X,Y coordinates and check boundaries in order to change direction */
@@ -50,8 +54,10 @@ Ball.prototype.locate = function(x,y){
     //Ball get out of boundaries in top or bottom edges
     if (y<=0 || y>=this.context.viewPortHeight-this.$imageBallView.height() ){
         //If we reach top or bottom and directions have not been yet inverted we do it.We avoid annoying bug with multiple repeated bouncings on edges
-        if ( (y <= 0 && this.ballVy <0 ) || (y>=this.context.viewPortHeight-this.$imageBallView.height()) && this.ballVy >0)
+        if ( (y <= 0 && this.ballVy <0 ) || (y>=this.context.viewPortHeight-this.$imageBallView.height()) && this.ballVy >0){
             this.ballVy = -this.ballVy;
+        }
+
     }
 
     this.$imageBallView.css("left",(Math.round(x))+ 'px');
@@ -74,6 +80,7 @@ Ball.prototype.ramdomDepartureAngle = function(){
 
     if (Math.round(Math.random()) === 0) this.ballVx = -this.ballVx;
     if (Math.round(Math.random()) === 0) this.ballVy = -this.ballVy;
+
 };
 
 module.exports = Ball;

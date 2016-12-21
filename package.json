@@ -41,8 +41,8 @@
         "karma-jasmine-jquery": "0.1.1",
         "karma-phantomjs-launcher": "1.0.2",
         "karma-spec-reporter": "0.0.26",
-        "gulp-jsdoc3": "1.0.1",        
-        "http-status": "0.1.8",
+        "gulp-jsdoc3": "1.0.1",
+        "http-status": "0.1.8",           
         "underscore": "1.5.2"
     }
 }

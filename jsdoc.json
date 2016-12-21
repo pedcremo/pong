@@ -3,7 +3,7 @@
     "allowUnknownTags": true
   },
   "opts": {
-    "destination": "./documentation",
+    "destination": "./frontend/doc",
 
     "recurse": true
   },

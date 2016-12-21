@@ -1,0 +1,108 @@
+/* general */
+body {
+	font-family:monospace;	font-size:13px;
+}
+h1 {
+	padding:0;
+	margin:0;
+}
+#page {
+	position:relative;
+	text-align:center;
+	width:800px;
+	height:600px;
+	margin:auto;
+	border:1px solid #000000;
+	padding:0;
+}
+
+div#backtohome {
+	text-align:center;
+	font-size:11px;
+}
+
+div#backtohome a {
+	text-decoration:none;
+	font-style:italic;
+	color:#000000;
+}
+
+/* content */
+#content {
+	z-index:4;
+	position:absolute;
+	left:0;
+	top:0;
+	width:800px;
+	height:600px;
+	margin:0;
+	padding:0;
+}
+
+#content a {
+	text-decoration:none;	font-style:italic;
+	color:#000000;
+}
+
+/* pong */
+#pong_table {
+	z-index:3;
+	position:absolute;
+	left:0;
+	top:0;
+	width:800px;
+	height:600px;
+	margin:0;
+	padding:0;
+}
+#pong_paddle1, #pong_paddle2 {
+	position:absolute;
+	width:12px;
+	height:80px;
+	background-color:#000000;
+}
+#pong_paddle1 {
+	left:4px;
+}
+#pong_paddle2 {
+	right:4px;
+}
+#pong_ball {
+	position:absolute;
+	width:11px;
+	height:11px;
+	margin:0;
+	padding:0;
+}
+#pong_ball img {
+	position:absolute;
+	left:0;
+	top:0;
+}
+#pong_number1, #pong_number2, #pong_number3, #pong_number4 {
+	position:absolute;
+	width:40px;
+	height:80px;
+}
+#pong_number1 {
+	top:0px;
+	left:130px;
+}
+#pong_number2 {
+	top:0px;
+	left:180px;
+}
+#pong_number3 {
+	top:0px;
+	right:180px;
+}
+#pong_number4 {
+	top:0px;
+	right:130px;
+}
+.numberpiece {
+	position:absolute;
+	left:0;
+	top:0;
+}
+

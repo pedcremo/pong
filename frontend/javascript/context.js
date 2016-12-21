@@ -5,8 +5,17 @@
 
 var ball = require('./ball');
 var stick = require('./stick');
+var utils = require('./utils');
 
 var animate;
+
+var constants = {
+        GAME_OVER_SHOW: 6000,//milliseconds
+        POINTS_REQUIRED_TO_WIN: 9,//Points needed to win a game
+        INCREASE_SPEED_STEP:0.1,
+        IA_MAX_PIXEL_SPEED:10,
+        CONSECUTIVE_HITS_TO_RAISE_SPEED:2
+};
 /**
  * Context prototype.
  * With this object (Singleton) by the way. We manage game context: points, on/off, balls location
@@ -15,6 +24,9 @@ var animate;
  * @constructor
  */
 function Context(){
+  this.lostPointSound = new Audio('sounds/lost_point.mp3'); //EXAM
+  this.gameOverSound = new Audio('sounds/game_over.mp3'); //EXAM
+
   this.score=0;
   this.state = "stop"; //STOP OR RUN
   this.speed = 1.8; //1 - 20;
@@ -44,7 +56,10 @@ Context.prototype.restart = function(){
     this.viewPortWidth = $(window).innerWidth();
     this.viewPortHeight = $(window).innerHeight();
     this.speed = this.viewPortWidth/1000;
-    console.log(this.viewPortWidth+ " speed = "+this.speed);
+    $("#scorePlayerLeft").css("font-size",this.viewPortHeight*0.2); //EXAM 10%
+    $("#scorePlayerRight").css("font-size",this.viewPortHeight*0.2); //EXAM 10%
+
+    //console.log(this.viewPortWidth+ " speed = "+this.speed);
     if (this.ball && this.stickLeft && this.stickRight) {
       this.ball.scaleAndRealocate();
       this.stickLeft.scaleAndRealocate();
@@ -87,28 +102,67 @@ Context.prototype.start = function(){
 };
 
 /** Reset pong game scores*/
+Context.prototype.gameOver = function(){
+
+   this.stop();
+   var self = this.getContextSelf();//EXAM
+   this.gameOverSound.play();//EXAM
+
+   utils.getModalTemplate("game-over",function($template){ //EXAM
+      if (self.stickLeft.score > self.stickRight.score){
+          $("#winnerLeft").show();//EXAM
+          $("#winnerRight").hide();//EXAM
+          $("#gameOv").css("background-position","right");
+      }else{
+          $("#winnerLeft").hide();//EXAM
+          $("#winnerRight").show();//EXAM
+          $("#gameOv").css("background-position","left");
+      }
+
+      var func=function(){ //EXAM
+          $template.fadeOut("slow",utils.chooseGameMode);
+          self.resetScores();
+      }; //EXAM
+      setTimeout(func,constants.GAME_OVER_SHOW); //EXAM
+   });
+};
+
 Context.prototype.resetScores = function(){
-   this.stickLeft.score = 0;
-   this.stickRight.score = 0;
+    this.stickLeft.score = 0;
+    this.stickRight.score = 0;
 
-   $("#scoreLeft").text(this.stickLeft.score);
-   $("#scoreRight").text(this.stickRight.score);
+    $("#scorePlayerLeft").text(this.stickLeft.score);
+    $("#scorePlayerRight").text(this.stickRight.score);
+};
 
+Context.prototype.increaseScore = function(side_){
+     this.lostPointSound.play();//EXAM
+     var $scoreEl = $("#scorePlayerLeft");
+     if (side_ == "left"){
+        this.stickRight.score+=1;
+        if (this.stickRight.score > constants.POINTS_REQUIRED_TO_WIN) this.gameOver();
+        else $("#scorePlayerRight").text(this.stickRight.score);
+     }else{
+        this.stickLeft.score+=1;
+        if (this.stickLeft.score > constants.POINTS_REQUIRED_TO_WIN) this.gameOver();
+        else $("#scorePlayerLeft").text(this.stickLeft.score);
+     }
+     this.incSpeed = 0;
 };
 
 /** Stop pong game */
 Context.prototype.stop = function(){
     this.state = "stop";
-    this.stickLeft.consecutiveHits=0;
-    this.stickRight.consecutiveHits=0;
+    //this.stickLeft.consecutiveHits=0;
+    //this.stickRight.consecutiveHits=0;
     this.incSpeed = 0;
     clearTimeout(animate);
 
-    this.start();
+    //this.start();
 };
 
 Context.prototype.increaseSpeed = function(){
-        this.incSpeed+=0.1;
+        this.incSpeed += constants.INCREASE_SPEED_STEP;
 };
 /** Animate one new game frame */
 Context.prototype.animate =function(){
@@ -119,11 +173,11 @@ Context.prototype.animate =function(){
     var millis = currTime.getTime() - this.lastTime.getTime();
     this.lastTime = currTime;
     var ball_ = this.ball;
-    if (this.stickLeft.consecutiveHits>=4 || this.stickRight.consecutiveHits>=4 ){
+    if (this.stickLeft.consecutiveHits >= constants.CONSECUTIVE_HITS_TO_RAISE_SPEED || this.stickRight.consecutiveHits >= constants.CONSECUTIVE_HITS_TO_RAISE_SPEED ){
         this.stickLeft.consecutiveHits=0;
         this.stickRight.consecutiveHits=0;
         this.increaseSpeed();
-        //console.log("incSpeed == "+this.incSpeed);
+        console.log("incSpeed == "+this.incSpeed);
     }
     ball_.locate(ball_.ballX + ((ball_.ballVx*millis)*(this.speed+this.incSpeed)) , ball_.ballY + ((ball_.ballVy*millis)*(this.speed+this.incSpeed)) );
 };
@@ -131,7 +185,7 @@ Context.prototype.animate =function(){
 /** Arificial intelligence behind stick movements when it is autopiloted by the computer */
 Context.prototype.processAI = function(stick_){
     var stickPos = stick_.getPosition();
-    var StickMAXSPEED = 10; //Max pixel speed per frame
+    var StickMAXSPEED = constants.IA_MAX_PIXEL_SPEED; //Max pixel speed per frame
     var stickVy = 1;
     var iamLeftStickAndBallIsCloseAndTowardsMe = (stick_.sideLocation === "left" && (this.ball.ballX < (this.viewPortWidth/2)) && (this.ball.ballVx < 0) );
     var iamRightStickAndBallIsCloseAndTowardsMe = (stick_.sideLocation === "right" && (this.ball.ballX > (this.viewPortWidth/2)) && (this.ball.ballVx > 0) );

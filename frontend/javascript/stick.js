@@ -4,7 +4,7 @@
 /*global $ */
 
 //var withObserver = require('./patterns/observer/Observer');
-
+var utils = require('./utils');
 /**
  * Create an instance of Stick.
  * This object let you move vertically using mouse pointer movements and hit the ball.
@@ -17,10 +17,12 @@
  */
 
 function Stick(id_stick,sideLocation,context,autopilot) {
+  this.sideLocation = sideLocation || "left" ; //right or left,
   this.autopilot = autopilot || false;  //If true computer moves the stick automatically
+  this.setAutopilot(this.autopilot);
   this.$imageStickView = $('#'+id_stick); //We get from index.html the image associated with the stick
   this.score = 0;
-  this.sideLocation = sideLocation || "left" ; //right or left,
+  this.consecutiveHits = 0;
   this.gap = 50;    //Distance in pixels from sideLocation
   this.context = context;
   this.$imageStickView.height(this.context.viewPortHeight*0.2);
@@ -45,8 +47,19 @@ function Stick(id_stick,sideLocation,context,autopilot) {
       if (!self.autopilot) self.locate(self.x,y-(self.$imageStickView.height()/2));
   });
 
-  $('#'+id_stick).on("mousedown touchstart",function(e){e.preventDefault();self.autopilot=false;self.context.hideBanner()});
-  $(window,'#'+id_stick).on("mouseup touchend",function(e){self.autopilot=true;self.context.showBanner("You should drag any stick with mouse or finger if you want to controll it")});
+  $('#'+id_stick).on("mousedown touchstart",function(e){
+      e.preventDefault();
+      //self.autopilot=false;
+      self.setAutopilot(false);
+      if (self.context.state === "stop") self.context.start();
+      self.context.hideBanner();
+  });
+
+  $(window,'#'+id_stick).on("mouseup touchend",function(e){
+      //self.autopilot=true;
+      self.setAutopilot(true);
+      self.context.showBanner("You should drag any stick with mouse or finger if you want to controll it");
+  });
 
   /** As an Observer we should implement this mandatory method. Called
   *   everytime the object we observe (in this case ball) call to Notify Subject method
@@ -66,31 +79,34 @@ function Stick(id_stick,sideLocation,context,autopilot) {
                 this.consecutiveHits+=1;
           }else{
             if ((ballPosition.x <= 0) || (ballPosition.x >= this.context.viewPortWidth)){
-                this.context.stop();
-                if (this.sideLocation=="left"){
-                    this.context.stickRight.increaseScore();
-                    if (this.context.stickRight.score > 8) this.context.resetScores();
-                }else{
-                    this.context.stickLeft.increaseScore();
-                    if (this.context.stickLeft.score > 8) this.context.resetScores();
-                }
-
+                this.context.increaseScore(this.sideLocation);
                 //We locate ball on center
                 this.context.ball.locate((this.context.viewPortWidth/2)-this.context.ball.$imageBallView.width(),(this.context.viewPortHeight/2)-this.context.ball.$imageBallView.height());  //Posicionem pilota al mig
+                this.context.ball.ramdomDepartureAngle();
             }
           }
       }
   };
 }
-
-/** Increase stick player owner score in one point */
-Stick.prototype.increaseScore = function(){
-     this.score+=1;
-     var $scoreEl = $("#scorePlayerLeft");
-     if (this.sideLocation === "right"){
-         $scoreEl = $("#scorePlayerRight");
-     }
-     $scoreEl.text(this.score);
+Stick.prototype.setAutopilot = function(true_or_false){
+        this.autopilot = true_or_false;
+        if (this.sideLocation === "left"){//EXAM
+            if (this.autopilot){//EXAM
+                $("#playerLeft").text("PC LEFT");//EXAM
+                $("#profileImg").hide();//EXAM
+            }else {
+                $("#playerLeft").text(utils.getCookie("username"));//EXAM
+                $("#profileImg").show().css("right","").css("left","10px");//EXAM
+            }
+        }else{//EXAM
+            if (this.autopilot) {//EXAM
+                $("#playerRight").text("PC RIGHT");//EXAM
+                $("#profileImg").hide();//EXAM
+            }else {
+                $("#playerRight").text(utils.getCookie("username"));//EXAM
+                $("#profileImg").show().css("left","").css("right","10px");//EXAM
+            }
+        }
 };
 
 /** For scaling game objects (ball, sticks ...) when viewport changes*/

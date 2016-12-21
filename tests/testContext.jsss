@@ -15,7 +15,7 @@ function io(){
 
 // Be descriptive with titles here. The describe and it titles combined read like a sentence.
 describe('Context testing bench', function() {
-
+  var audioOriginal, audioMock;
   // inject the HTML fixture for the tests
   beforeEach(function() {
     var fixture = '<div id ="fixture"><img id="bola" style="position:absolute" src="images/squareWhite.png" />'+
@@ -25,22 +25,30 @@ describe('Context testing bench', function() {
     '<img id="stickRight" style="position:absolute" src="images/stickWhite.png" />'+
     '<h2 id="playerRight">v</h2>'+
     '<p id="scorePlayerRight">0</p><div id="vertical"></div>'+
-    '<div id="banner" style="display:none"></div></div>';
+    '<div id="banner" style="display:none"></div></div>'+
+    '<input class="option" type="button" id="single" value="1. Single player (you play against the computer)"/><br>';
 
     document.body.insertAdjacentHTML(
       'afterbegin',
       fixture);
 
+    //jasmine.getStyleFixtures().fixturesPath = './';
+    //loadStyleFixtures('frontend/styles/classic.css');
+
+    jasmine.clock().install();
+    audioOriginal = window.Audio;
+    audioMock = {play:function(){}};
+    window.Audio = function() { return audioMock; };
 
     var context = require('../frontend/javascript/context');
     this.context_ = new context();
-    jasmine.clock().install();
   });
 
   // remove the html fixture from the DOM
   afterEach(function() {
     document.body.removeChild(document.getElementById('fixture'));
     jasmine.clock().uninstall();
+    window.Audio = audioOriginal;
   });
 
 

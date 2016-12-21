@@ -9,6 +9,9 @@
  * @see module:utils
  */
 
+//var singleContext = require('./patterns/singleton/singletonContext');
+var main = require('./main');
+
 function setCookie(cname, cvalue, exdays) {
     if (cvalue && cvalue!== ""){
         var d = new Date();
@@ -19,11 +22,24 @@ function setCookie(cname, cvalue, exdays) {
 }
 
 function getModalTemplate(idTemplate,callback){
-  $.get("template/"+idTemplate,function(data,status){
-          $('body').append(data);
-          $('#'+idTemplate).show();
-          callback($('#'+idTemplate));
-  });
+  //If exists in the DOM tree we don't call via ajax again
+  if ($('#'+idTemplate).length){
+      $('#'+idTemplate).show();
+      callback($('#'+idTemplate));
+  }else{
+      $.ajax({
+            url: "template/"+idTemplate,
+            type: 'GET',
+            success: function(data){
+                $('body').append(data);
+                $('#'+idTemplate).fadeIn("slow");
+                callback($('#'+idTemplate));
+            },
+            error: function(data) {
+                console.log('woops ERROR calling! '+idTemplate); //or whatever
+            }
+        });
+   }
 }
 
 function getCookie(cname) {
@@ -49,13 +65,14 @@ function getCookie(cname) {
 function showPlayerProfile(){
   var user = getCookie("username");
   if (user && user!==""){
-    var $nicknameElement=$("#playerLeft");
-    $nicknameElement.text(user);
+    //var $nicknameElement=$("#playerLeft"); EXAM LEAVE
+    //$nicknameElement.text(user);EXAM LEAVE
     var dataImage = localStorage.getItem('imgData');
     if (dataImage){
-      var $profileImg=$("<img/>");
-      $profileImg.attr("src","data:image/jpg;base64," + dataImage).width(48).height(64);
-      $("body").prepend($profileImg);
+      var $profile=$('#profileImg');
+      $profile.css("position","absolute").hide();//EXAM
+      $profile.attr("src","data:image/jpg;base64," + dataImage).width(48).height(64);
+      //$("body").prepend($profileImg); EXAM LEAVE
     }
     return true;
   }else{
@@ -77,7 +94,6 @@ function checkIfProfileHasBeenDefined(callBackFunction) {
             //$(document,".close:first").click(function(){
             $(".close:first").off("click").on("click",function(){
               if (showPlayerProfile()){
-                console.log("Merdaaaa");
                 $template.hide();
                 callBackFunction();
               }
@@ -94,7 +110,7 @@ function checkIfProfileHasBeenDefined(callBackFunction) {
         });
 
     }
-    $("#playerRight").text("Computer");
+    //$("#playerRight").text("Computer");
 }
 
 //Encode an image using base64 previously to store it on LocalStorage
@@ -127,6 +143,19 @@ function readFileAndPreviewFromLocalFileSystem(input) {
       reader.readAsDataURL(input.files[0]);
   }
 }
+function chooseGameMode(context_){
+    if (!context_) context_ = main.singletonContext.getInstance(); //EXAM
+    getModalTemplate("modal-game-mode",function($template){
+        $template.find("#single").on("click",function(){
+            if (context_ && context_.state === "stop") context_.start();
+            else context_.resetScores();//EXAM
+            $template.fadeOut("slow");
+        });
+    });
+}
+
 /** Before start any game we check if user has defined a profile. */
  module.exports.checkIfProfileHasBeenDefined = checkIfProfileHasBeenDefined;
  module.exports.getModalTemplate = getModalTemplate;
+ module.exports.chooseGameMode = chooseGameMode;
+ module.exports.getCookie = getCookie;
